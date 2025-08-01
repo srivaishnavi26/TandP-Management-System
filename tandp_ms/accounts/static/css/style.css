@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main-header {
+    background-color: #ffffff;
+    padding: 16px 0;
+    border-bottom: 2px solid #ffa94d;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+}
+
+.header-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 120px;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 0.6s ease-in;
+}
+
+h2 {
+    font-size: 2.2em;
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+
+.role-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.role-section div {
+    text-align: center;
+    width: 200px;
+}
+
+.role-section img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+}
+
+.orange-btn {
+    background-color: #ffa94d;
+    color: #000000;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(255, 169, 77, 0.3);
+}
+
+.orange-btn:hover {
+    background-color: #ff8800;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+footer {
+    text-align: center;
+    padding: 14px;
+    font-size: 0.9em;
+    background-color: #f2f2f2;
+    color: #555;
+    border-top: 1px solid #ddd;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .role-section {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .role-section div {
+        width: 100%;
+    }
+
+    .header-img {
+        max-height: 90px;
+    }
+
+    h2 {
+        font-size: 1.7em;
+    }
+}
