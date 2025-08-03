@@ -1,20 +1,43 @@
 from django.shortcuts import render
+from .models import ContactMessage
 
 def home(request):
     return render(request, 'accounts/home.html')
 
 def admin_login(request):
     return render(request, 'accounts/admin_login.html')
+
 def student_login(request):
     return render(request, 'accounts/student_login.html')
 
 def about(request):
     return render(request, 'accounts/about.html')
 
-def contact(request):
+def contact_view(request):
     message_sent = False
-    if request.method == 'POST':
+
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+
+        print("New contact submission:")
+        print(f"Name: {name}")
+        print(f"Email: {email}")
+        print(f"Subject: {subject}")
+        print(f"Message: {message}")
+
+        # Save the contact message to the database
+        ContactMessage.objects.create(
+            name=name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+
         message_sent = True
+
     return render(request, 'accounts/contact.html', {'message_sent': message_sent})
 
 def team_view(request):
