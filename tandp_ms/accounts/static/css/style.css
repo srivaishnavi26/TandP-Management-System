@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-body, html {
+html, body {
     height: 100%;
     font-family: 'Poppins', sans-serif;
     background-color: #ffffff;
@@ -12,12 +12,8 @@ body, html {
 }
 
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+    width: 100%;
+    padding: 0 40px;
 }
 
 .main-header {
@@ -25,8 +21,12 @@ body, html {
     padding: 16px 0;
     border-bottom: 2px solid #ffa94d;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.main-header .wrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .header-img {
@@ -38,14 +38,49 @@ body, html {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
+.main-nav {
+    background-color: #fff3e6;
+    border-bottom: 2px solid #ffa94d;
+    box-shadow: 0 4px 8px rgba(255, 169, 77, 0.1);
+}
+
+.main-nav .wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 16px 0;
+    margin: 0;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #ff8800;
+    font-weight: 600;
+    font-size: 1.1em;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+}
+
+.main-nav a:hover {
+    background-color: #ffe0cc;
+    border-radius: 8px;
+}
+
 .content {
-    flex: 1;
+    padding: 60px 0;
+}
+
+.content .wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     text-align: center;
-    padding: 20px;
     animation: fadeIn 0.6s ease-in;
 }
 
@@ -53,12 +88,12 @@ h2 {
     font-size: 2.2em;
     font-weight: 600;
     margin-bottom: 40px;
+    color: #ffa94d;
 }
 
 .role-section {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 80px;
     flex-wrap: wrap;
     margin-top: 10px;
@@ -96,14 +131,17 @@ h2 {
     color: #ffffff;
     transform: translateY(-2px);
 }
-
 footer {
+    background-color: #fff3e6;
+    color: #ff8800;
+    border-top: 2px solid #ffa94d;
+    padding: 20px 0;
+    font-size: 0.95em;
     text-align: center;
-    padding: 14px;
-    font-size: 0.9em;
-    background-color: #f2f2f2;
-    color: #555;
-    border-top: 1px solid #ddd;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    bottom: 0%;
+    position: relative;
 }
 
 @keyframes fadeIn {
@@ -118,6 +156,20 @@ footer {
 }
 
 @media (max-width: 768px) {
+    .wrapper {
+        padding: 0 20px;
+    }
+
+    .main-header .wrapper {
+        flex-direction: column;
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
     .role-section {
         flex-direction: column;
         gap: 30px;

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About - T&PMS{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="about-section">
+  <div class="wrapper">
+    <h2>About the Training & Placement Cell</h2>
+    <p>
+      The Training and Placement Cell (T&P Cell) at SRIT plays a vital role in shaping the careers of students.
+      It actively bridges the gap between academic learning and industry expectations through comprehensive training programs
+      and strong placement support.
+    </p>
+    <p>
+      Our team ensures students are industry-ready by organizing technical workshops, mock interviews, and collaboration with recruiters.
+      We maintain a structured and transparent placement process that aligns students’ capabilities with corporate requirements.
+    </p>
+    <p>
+      The cell also promotes internships, skill-building seminars, and alumni interactions, offering students holistic exposure to the professional world.
+    </p>
+  </div>
+</section>
+{% endblock %}

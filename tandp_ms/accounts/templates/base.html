@@ -3,24 +3,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}T&P Portal{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>{% block title %}T&PMS{% endblock %}</title>
+    {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <div class="wrapper">
-        <header class="main-header">
+
+    <header class="main-header">
+        <div class="wrapper">
             <img src="{% static 'images/srit_banner.jpg' %}" alt="SRIT Banner" class="header-img">
-        </header>
+        </div>
+    </header>
 
-        <main class="content">
+    <nav class="main-nav">
+        <div class="wrapper">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'team' %}">T&P Team</a></li>
+                <li><a href="{% url 'admin_login' %}">Admin Login</a></li>
+                <li><a href="{% url 'student_login' %}">Student Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="content">
+        <div class="wrapper">
             {% block content %}{% endblock %}
-        </main>
+        </div>
+    </main>
 
-        <footer>
-            &copy; 2025 T&P Cell | Srinivasa Ramanujan Institute of Technology
-        </footer>
-    </div>
+    <footer>
+        <div class="wrapper">
+           <p> &copy; 2025 SRIT Placement Cell. All rights reserved. </p>
+        </div>
+    </footer>
+
 </body>
-
 </html>

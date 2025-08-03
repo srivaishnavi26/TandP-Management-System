@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Team{% endblock %}
+
+{% block content %}
+<h2>TRAINING & PLACEMENT CELL - TEAM</h2>
+
+<link rel="stylesheet" href="{% static 'css/team.css' %}">
+
+<div class="team-table-container">
+    <table class="team-table">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Mobile Number</th>
+                <th>Email ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in team_members %}
+            <tr>
+                <td>{{ member.sno }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.designation }}</td>
+                <td>{{ member.mobile }}</td>
+                <td><a href="mailto:{{ member.email }}">{{ member.email }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

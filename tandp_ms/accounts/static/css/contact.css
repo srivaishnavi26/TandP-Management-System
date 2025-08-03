@@ -1,0 +1,114 @@
+.contact-section {
+    background-color: #fff8f0;
+    padding: 60px 20px;
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+}
+
+.contact-section .wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-left: 6px solid #ffa94d;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(255, 169, 77, 0.1);
+    border-radius: 12px;
+}
+
+.contact-section h2 {
+    font-size: 32px;
+    color: #ffa94d;
+    margin-bottom: 25px;
+    font-weight: 600;
+    border-bottom: 2px solid #ffa94d;
+    padding-bottom: 8px;
+}
+
+.contact-info {
+    margin-bottom: 30px;
+}
+
+.contact-info h3 {
+    color: #ffa94d;
+    margin-bottom: 10px;
+}
+
+.contact-info p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 16px;
+}
+
+.form-row label {
+    width: 100px;
+    font-weight: 600;
+    padding-top: 10px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #fffefb;
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-form button {
+    margin-top: 10px;
+    background-color: #ffa94d;
+    color: #000000;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(255, 169, 77, 0.3);
+}
+
+.contact-form button:hover {
+    background-color: #ff8800;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.success-message {
+    margin-top: 20px;
+    color: green;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-row label {
+        width: auto;
+        padding-top: 0;
+    }
+
+    .contact-form button {
+        width: 100%;
+        text-align: center;
+    }
+}
