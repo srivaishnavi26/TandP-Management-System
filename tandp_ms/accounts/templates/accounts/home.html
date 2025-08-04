@@ -3,13 +3,14 @@
 
 {% block title %}Select Role{% endblock %}
 
-{% block head %}
+{% block extra_css  %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 
 {% block content %}
-<h2 style="text-align:center;">SELECT YOUR ROLE TO LOGIN</h2>
+<h2 class="select-role-heading">SELECT YOUR ROLE TO LOGIN</h2>
 
 <div class="role-section">
     <div>

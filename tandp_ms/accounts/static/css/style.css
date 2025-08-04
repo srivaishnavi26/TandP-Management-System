@@ -9,6 +9,8 @@ html, body {
     font-family: 'Poppins', sans-serif;
     background-color: #ffffff;
     color: #000000;
+    display: flex;
+    flex-direction: column;
 }
 
 .wrapper {
@@ -71,10 +73,11 @@ html, body {
     background-color: #ffe0cc;
     border-radius: 8px;
 }
-
 .content {
+    flex: 1;
     padding: 60px 0;
 }
+
 
 .content .wrapper {
     display: flex;
@@ -88,7 +91,7 @@ h2 {
     font-size: 2.2em;
     font-weight: 600;
     margin-bottom: 40px;
-    color: #ffa94d;
+    color: #000000 !important;
 }
 
 .role-section {
@@ -140,8 +143,6 @@ footer {
     text-align: center;
     font-weight: 500;
     font-family: 'Poppins', sans-serif;
-    bottom: 0%;
-    position: relative;
 }
 
 @keyframes fadeIn {
