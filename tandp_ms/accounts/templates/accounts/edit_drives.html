@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/manage_drives.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="drive-container">
+    <h2>Edit Placement Drive</h2>
+    <form method="post" class="drive-form">
+        {% csrf_token %}
+        <label>Company Name:</label>
+        <input type="text" name="company_name" value="{{ drive.company_name }}" required>
+
+        <label>Job Role:</label>
+        <input type="text" name="job_role" value="{{ drive.job_role }}" required>
+
+        <label>Date:</label>
+        <input type="date" name="date" value="{{ drive.date }}" required>
+
+        <label>Package:</label>
+        <input type="text" name="package" value="{{ drive.package }}" required>
+
+        <label>Description:</label>
+        <textarea name="description" required>{{ drive.description }}</textarea>
+
+        <button type="submit" class="orange-btn">Update Drive</button>
+    </form>
+</div>
+{% endblock %}

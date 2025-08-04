@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/manage_drives.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="drive-container">
+    <h2>Manage Placement Drives</h2>
+
+    {% if drives %}
+        <table class="drive-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Job Role</th>
+                    <th>Date</th>
+                    <th>Package</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for drive in drives %}
+                    <tr>
+                        <td>{{ drive.company_name }}</td>
+                        <td>{{ drive.job_role }}</td>
+                        <td>{{ drive.date }}</td>
+                        <td>{{ drive.package }}</td>
+                        <td>{{ drive.description|truncatechars:60 }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'edit_drive' drive.id %}">Edit</a>
+                                <a href="{% url 'delete_drive' drive.id %}" onclick="return confirm('Are you sure you want to delete this drive?')">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No placement drives available.</p>
+    {% endif %}
+
+    <div style="margin-top: 30px;">
+        <a href="{% url 'add_drive' %}" class="add-drive-btn">Add New Drive</a>
+    </div>
+</div>
+{% endblock %}

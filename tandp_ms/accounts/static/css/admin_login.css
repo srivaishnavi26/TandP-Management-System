@@ -1,0 +1,77 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 10px auto 60px auto;
+    padding: 32px 28px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.login-container h2 {
+    margin-bottom: 28px;
+    font-size: 26px;
+    color: #222;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-form label {
+    text-align: left;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    padding: 14px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    transition: border 0.3s;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #ffa94d;
+    background-color: #fff;
+}
+
+.login-btn {
+    padding: 14px;
+    width: 100%;
+    background-color: #ffa94d;
+    color: #000;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+    background-color: #ff8800;
+    color: #fff;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-weight: 500;
+    margin-bottom: 16px;
+}

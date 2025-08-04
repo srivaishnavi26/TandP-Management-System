@@ -1,0 +1,145 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100%;
+}
+.drive-container {
+    max-width: 700px;
+    margin: 10px auto 10px auto;
+    padding: 40px;
+    background-color: #fff;
+    border: 1px solid #ffa94d;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(255, 169, 77, 0.2);
+}
+
+.drive-container h2 {
+    font-size: 2rem;
+    color: #222;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.drive-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+}
+
+.drive-form input[type="text"],
+.drive-form input[type="date"],
+.drive-form textarea,
+.drive-form select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1em;
+    background-color: #fefefe;
+    transition: border-color 0.2s ease;
+}
+
+.drive-form input:focus,
+.drive-form textarea:focus,
+.drive-form select:focus {
+    outline: none;
+    border-color: #ff9900;
+}
+
+.drive-form textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.orange-btn {
+    width: 100%;
+    background-color: #ffa94d;
+    color: #000;
+    border: none;
+    padding: 14px;
+    font-size: 1.1em;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.orange-btn:hover {
+    background-color: #ff8800;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.drive-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    font-size: 0.95em;
+}
+
+.drive-table th,
+.drive-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #ffa94d;
+}
+
+.drive-table th {
+    background-color: #fff3e6;
+    color: #ff8800;
+    font-weight: 600;
+}
+
+.drive-table tr:hover {
+    background-color: #fff8f0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.action-buttons a {
+    padding: 8px 16px;
+    background-color: #ffa94d;
+    color: #000;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.action-buttons a:hover {
+    background-color: #ff8800;
+    color: #fff;
+}
+
+.add-drive-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ffa94d;
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.add-drive-btn:hover {
+    background-color: #ff8800;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.drive-form {
+    text-align: left;
+}

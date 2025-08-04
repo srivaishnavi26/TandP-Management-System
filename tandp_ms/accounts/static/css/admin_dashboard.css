@@ -1,0 +1,87 @@
+html, body {
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dashboard-container h2 {
+    font-size: 28px;
+    margin: 0;
+    color: #333;
+}
+
+.logout-link {
+    font-size: 16px;
+    text-decoration: none;
+    color: #d9534f;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+.dashboard-button,
+.dashboard-link {
+    display: inline-block;
+    margin: 10px 10px 20px 0;
+    padding: 10px 15px;
+    background-color: #ffa94d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.dashboard-button:hover,
+.dashboard-link:hover {
+    background-color: #ff8800;
+    color: #fff;
+}
+
+.message-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.message-table th,
+.message-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.message-table th {
+    background-color: #f5f5f5;
+}
+
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
+}
