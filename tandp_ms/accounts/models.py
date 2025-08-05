@@ -1,5 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
 
+class StaffProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    designation = models.CharField(max_length=100)
+    mobile = models.CharField(max_length=15)
+    email = models.EmailField()
+    role = models.CharField(max_length=100)  # e.g., 'Head', 'TPO', 'Coordinator-CSE'
+
+    def __str__(self):
+        return f"{self.name} ({self.role})"
 class Student(models.Model):
     full_name = models.CharField(max_length=100)
     roll_number = models.CharField(max_length=20, unique=True)

@@ -85,3 +85,61 @@ html, body {
 .delete-button:hover {
     background-color: #c0392b;
 }
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.dashboard-card {
+    flex: 1;
+    min-width: 200px;
+    background-color: #ffa94d;
+    color: white;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+.dashboard-card h5 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.card-number {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.dashboard-card {
+    flex: 1;
+    min-width: 200px;
+    background-color: #ffa94d;
+    color: white;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+.dashboard-card h5 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.card-number {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}

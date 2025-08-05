@@ -1,10 +1,7 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
-
-{% block title %}Admin Dashboard{% endblock %}
-
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -15,37 +12,79 @@
         <a href="{% url 'logout' %}" class="logout-link">Logout</a>
     </div>
 
-    <a href="{% url 'view_students' %}" class="dashboard-button">View Registered Students</a>
-    <a href="{% url 'view_drives' %}" class="dashboard-link">Manage Placement Drives</a>
+    <div class="dashboard-cards">
+        <div class="dashboard-card">
+            <h5>Total Students</h5>
+            <p class="card-number">{{ total_students }}</p>
+        </div>
+        <div class="dashboard-card">
+            <h5>Total Drives</h5>
+            <p class="card-number">{{ total_drives }}</p>
+        </div>
+        <div class="dashboard-card">
+            <h5>Upcoming Drives</h5>
+            <p class="card-number">{{ upcoming_drives }}</p>
+        </div>
+        <div class="dashboard-card">
+            <h5>Messages</h5>
+            <p class="card-number">{{ total_messages }}</p>
+        </div>
+    </div>
 
-    <h3>Contact Messages</h3>
+    <div>
+        <a href="{% url 'add_drive' %}" class="dashboard-button">Add Drive</a>
+        <a href="{% url 'view_drives' %}" class="dashboard-button">View Drives</a>
+        <a href="{% url 'view_students' %}" class="dashboard-button">View Students</a>
+    </div>
 
-    {% if messages %}
+    <hr>
+
+    <h4>Your Profile</h4>
+    {% if staff_profile %}
+        <p><strong>Name:</strong> {{ staff_profile.name }}</p>
+        <p><strong>Designation:</strong> {{ staff_profile.designation }}</p>
+        <p><strong>Email:</strong> {{ staff_profile.email }}</p>
+        <p><strong>Phone:</strong> {{ staff_profile.phone }}</p>
+    {% else %}
+        <p>Your profile is not yet set up.</p>
+    {% endif %}
+
+    <hr>
+
+    <h4>All Staff Profiles</h4>
+    {% if staff_profiles %}
+        <ul>
+            {% for staff in staff_profiles %}
+                <li>{{ staff.name }} - {{ staff.designation }} | {{ staff.email }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No staff records found.</p>
+    {% endif %}
+
+    <hr>
+
+    <h4>Contact Messages</h4>
+    {% if contact_messages %}
         <table class="message-table">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Subject</th>
                     <th>Message</th>
-                    <th>Received At</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for msg in messages %}
+                {% for msg in contact_messages %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
                     <td>{{ msg.name }}</td>
                     <td>{{ msg.email }}</td>
-                    <td>{{ msg.subject }}</td>
                     <td>{{ msg.message }}</td>
-                    <td>{{ msg.created_at|date:"M d, Y H:i" }}</td>
                     <td>
-                        <form action="{% url 'delete_message' msg.id %}" method="post" style="display:inline;">
+                        <form method="post" action="{% url 'delete_contact_message' msg.id %}">
                             {% csrf_token %}
-                            <button type="submit" class="delete-button" onclick="return confirm('Delete this message?');">Delete</button>
+                            <button type="submit" class="delete-button">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -53,7 +92,8 @@
             </tbody>
         </table>
     {% else %}
-        <p>No messages found.</p>
+        <p>No contact messages found.</p>
     {% endif %}
+
 </div>
 {% endblock %}

@@ -1,0 +1,61 @@
+h2 {
+    margin-top: 40px;
+    color: #ffa94d;
+    font-size: 2em;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.team-table-container {
+    width: 90%;
+    margin: 30px auto;
+    overflow-x: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(255, 169, 77, 0.15);
+    background-color: #ffffff;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+}
+
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 1em;
+}
+
+.team-table th,
+.team-table td {
+    padding: 14px 18px;
+    border: 1px solid #ffe0cc;
+    text-align: center;
+}
+
+.team-table th {
+    background-color: #ffa94d;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.team-table tr:nth-child(even) {
+    background-color: #fff8f0;
+}
+
+.team-table tr:hover {
+    background-color: #fff0e0;
+    transition: background-color 0.3s ease;
+}
+
+.team-table a {
+    color: #ff8800;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.team-table a:hover {
+    text-decoration: underline;
+}

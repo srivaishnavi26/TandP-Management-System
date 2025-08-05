@@ -1,35 +1,43 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/view_students.css' %}">
+{% endblock %}
 
 {% block content %}
-<h2 class="text-2xl font-bold mb-4">Registered Students</h2>
-<table class="table-auto w-full border border-gray-300">
-    <thead>
-        <tr class="bg-gray-100">
-            <th class="border px-4 py-2">#</th>
-            <th class="border px-4 py-2">Full Name</th>
-            <th class="border px-4 py-2">Roll Number</th>
-            <th class="border px-4 py-2">Email</th>
-            <th class="border px-4 py-2">Phone</th>
-            <th class="border px-4 py-2">Branch</th>
-            <th class="border px-4 py-2">Graduation Year</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for student in students %}
-        <tr>
-            <td class="border px-4 py-2">{{ forloop.counter }}</td>
-            <td class="border px-4 py-2">{{ student.full_name }}</td>
-            <td class="border px-4 py-2">{{ student.roll_number }}</td>
-            <td class="border px-4 py-2">{{ student.email }}</td>
-            <td class="border px-4 py-2">{{ student.phone }}</td>
-            <td class="border px-4 py-2">{{ student.branch }}</td>
-            <td class="border px-4 py-2">{{ student.graduation_year }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="7" class="text-center py-4">No students registered yet.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<h2>Registered Students</h2>
+
+<div class="team-table-container">
+    <table class="team-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Roll Number</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Branch</th>
+                <th>Graduation Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ student.full_name }}</td>
+                <td>{{ student.roll_number }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.phone }}</td>
+                <td>{{ student.branch }}</td>
+                <td>{{ student.graduation_year }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No students registered yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
