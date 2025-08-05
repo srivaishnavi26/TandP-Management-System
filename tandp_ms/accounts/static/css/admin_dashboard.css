@@ -1,145 +1,238 @@
-html, body {
-    background-color: #f4f4f4;
+/* Admin Dashboard - Final Polished Version */
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
 }
 
+/* Container */
 .dashboard-container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 40px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
+/* Header */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-.dashboard-container h2 {
-    font-size: 28px;
-    margin: 0;
-    color: #333;
+.dashboard-header h2 {
+    font-size: 26px;
+    font-weight: 600;
 }
 
 .logout-link {
-    font-size: 16px;
     text-decoration: none;
-    color: #d9534f;
+    background-color: #dc3545;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .logout-link:hover {
-    text-decoration: underline;
+    background-color: #c82333;
 }
 
+/* Cards */
+.dashboard-cards {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    gap: 20px;
+}
+
+.dashboard-card {
+    flex: 1;
+    min-width: 220px;
+    padding: 25px;
+    background-color: #ffa94d;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.2s;
+    color: white;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    background-color: #ff8800;
+}
+
+.card-number {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: white;
+}
+
+/* Buttons */
 .dashboard-button,
-.dashboard-link {
-    display: inline-block;
-    margin: 10px 10px 20px 0;
-    padding: 10px 15px;
+.delete-button,
+.edit-button,
+.admin-button {
+    padding: 10px 18px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+/* Primary action button */
+.dashboard-button {
     background-color: #ffa94d;
     color: white;
     text-decoration: none;
-    border-radius: 5px;
     font-weight: 500;
 }
 
-.dashboard-button:hover,
-.dashboard-link:hover {
+.dashboard-button:hover {
     background-color: #ff8800;
-    color: #fff;
 }
 
+/* Delete */
+.delete-button {
+    background-color: #ff8c42;
+    color: white;
+    border: 2px solid #ff6b00;
+}
+
+.delete-button:hover {
+    background-color: #ff6b00;
+}
+
+/* Optional Edit/Admin buttons if used separately */
+.edit-button,
+.admin-button {
+    background-color: #ffa94d;
+    color: white;
+}
+
+.edit-button:hover,
+.admin-button:hover {
+    background-color: #ff8800;
+}
+
+/* Tables */
 .message-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    font-size: 14px;
+    margin-bottom: 40px;
 }
 
 .message-table th,
 .message-table td {
-    padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #dee2e6;
+    padding: 14px 18px;
     text-align: left;
+    font-size: 16px;
+    vertical-align: middle;
 }
 
 .message-table th {
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
+    font-weight: 600;
 }
 
-.delete-button {
-    background-color: #e74c3c;
-    color: white;
+.message-table td:last-child {
+    text-align: right;
+}
+
+/* Action button wrapper */
+.staff-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.staff-actions form,
+.staff-actions a {
+    display: inline-block;
+}
+
+.message-table td > .staff-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.message-table td .staff-actions {
+    justify-content: flex-end;
+}
+
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    text-align: left;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="tel"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+form input[type="submit"],
+form button[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
     border: none;
-    padding: 4px 10px;
-    border-radius: 4px;
+    border-radius: 6px;
+    background-color: #ffa94d;
+    color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.delete-button:hover {
-    background-color: #c0392b;
-}
-.dashboard-cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 30px;
+form input[type="submit"]:hover,
+form button[type="submit"]:hover {
+    background-color: #ff8800;
 }
 
-.dashboard-card {
-    flex: 1;
-    min-width: 200px;
-    background-color: #ffa94d;
-    color: white;
-    border-radius: 8px;
-    padding: 15px 20px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.05);
-}
+@media screen and (max-width: 768px) {
+    .dashboard-cards {
+        flex-direction: column;
+    }
 
-.dashboard-card h5 {
-    margin: 0 0 10px;
-    font-size: 16px;
-    font-weight: 600;
-}
+    .staff-actions {
+        flex-direction: column;
+        gap: 6px;
+        align-items: center; /* Optional: center-align buttons on mobile */
+    }
 
-.card-number {
-    font-size: 28px;
-    font-weight: bold;
-    margin: 0;
-}
-.dashboard-cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 30px;
-}
+    .staff-actions form,
+    .staff-actions a {
+        width: 100%;
+    }
 
-.dashboard-card {
-    flex: 1;
-    min-width: 200px;
-    background-color: #ffa94d;
-    color: white;
-    border-radius: 8px;
-    padding: 15px 20px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.05);
-}
-
-.dashboard-card h5 {
-    margin: 0 0 10px;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.card-number {
-    font-size: 28px;
-    font-weight: bold;
-    margin: 0;
+    .staff-actions .dashboard-button,
+    .staff-actions .delete-button,
+    .staff-actions .edit-button,
+    .staff-actions .admin-button {
+        width: 100%;
+    }
 }

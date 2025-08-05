@@ -41,10 +41,26 @@
 
     <h4>Your Profile</h4>
     {% if staff_profile %}
-        <p><strong>Name:</strong> {{ staff_profile.name }}</p>
-        <p><strong>Designation:</strong> {{ staff_profile.designation }}</p>
-        <p><strong>Email:</strong> {{ staff_profile.email }}</p>
-        <p><strong>Phone:</strong> {{ staff_profile.phone }}</p>
+    <table class="message-table">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ staff_profile.name }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ staff_profile.designation }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ staff_profile.email }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ staff_profile.mobile }}</td>
+            </tr>
+        </tbody>
+    </table>
     {% else %}
         <p>Your profile is not yet set up.</p>
     {% endif %}
@@ -52,12 +68,47 @@
     <hr>
 
     <h4>All Staff Profiles</h4>
+    <a href="{% url 'add_staff' %}" class="dashboard-button">Add Staff</a>
+
     {% if staff_profiles %}
-        <ul>
+    <table class="message-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
             {% for staff in staff_profiles %}
-                <li>{{ staff.name }} - {{ staff.designation }} | {{ staff.email }}</li>
+            <tr>
+                <td>{{ staff.name }}</td>
+                <td>{{ staff.designation }}</td>
+                <td>{{ staff.email }}</td>
+                <td>{{ staff.mobile }}</td>
+                <td>{{ staff.role }}</td>
+                <td>
+                    <div class="staff-actions">
+                        <a href="{% url 'edit_staff' staff.id %}" class="dashboard-button">Edit</a>
+                        <form action="{% url 'delete_staff' staff.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-button">Delete</button>
+                        </form>
+                        {% if not staff.user.is_superuser %}
+                        <form action="{% url 'make_staff_admin' staff.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="dashboard-button">Make Admin</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
             {% endfor %}
-        </ul>
+        </tbody>
+    </table>
     {% else %}
         <p>No staff records found.</p>
     {% endif %}
@@ -66,31 +117,34 @@
 
     <h4>Contact Messages</h4>
     {% if contact_messages %}
-        <table class="message-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Message</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for msg in contact_messages %}
-                <tr>
-                    <td>{{ msg.name }}</td>
-                    <td>{{ msg.email }}</td>
-                    <td>{{ msg.message }}</td>
-                    <td>
-                        <form method="post" action="{% url 'delete_contact_message' msg.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="delete-button">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <table class="message-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for msg in contact_messages %}
+            <tr>
+                <td>{{ msg.name }}</td>
+                <td>{{ msg.email }}</td>
+                <td>{{ msg.message }}</td>
+<td>
+    <div class="staff-actions">
+        <form method="post" action="{% url 'delete_contact_message' msg.id %}">
+            {% csrf_token %}
+            <button type="submit" class="delete-button">Delete</button>
+        </form>
+    </div>
+</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% else %}
         <p>No contact messages found.</p>
     {% endif %}

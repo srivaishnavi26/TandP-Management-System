@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="dashboard-container">
+    <h2>Edit Staff Profile</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="name">Name:</label>
+        <input type="text" name="name" value="{{ staff.name }}" required>
+
+        <label for="designation">Designation:</label>
+        <input type="text" name="designation" value="{{ staff.designation }}" required>
+
+        <label for="mobile">Mobile:</label>
+        <input type="text" name="mobile" value="{{ staff.mobile }}" required>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="{{ staff.email }}" required>
+
+        <label for="role">Role:</label>
+        <input type="text" name="role" value="{{ staff.role }}" required>
+
+        <button type="submit" class="dashboard-button">Save Changes</button>
+        <a href="{% url 'admin_dashboard' %}" class="dashboard-button">Cancel</a>
+    </form>
+</div>
+{% endblock %}

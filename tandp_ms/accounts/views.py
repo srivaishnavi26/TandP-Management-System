@@ -3,17 +3,24 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages as flash_messages
 from django.utils import timezone
-
-from .models import (
-    ContactMessage, Student, PlacementDrive,
-    Registration, StaffProfile
-)
+from .models import ContactMessage, Student, PlacementDrive, Registration, StaffProfile
+from django.contrib.auth.models import User
 
 def is_admin(user):
     return user.is_superuser
 
 def is_staff_user(user):
     return user.is_authenticated and user.is_staff
+
+@login_required
+@user_passes_test(is_staff_user)
+def make_staff_admin(request, staff_id):
+    staff = get_object_or_404(StaffProfile, id=staff_id)
+    staff.user.is_staff = True
+    staff.user.is_superuser = True
+    staff.user.save()
+    flash_messages.success(request, f"{staff.name} is now an admin.")
+    return redirect('admin_dashboard')
 
 @login_required(login_url='admin_login')
 @user_passes_test(is_staff_user)
@@ -37,17 +44,6 @@ def admin_dashboard(request):
         'total_messages': total_messages
     }
     return render(request, 'accounts/admin_dashboard.html', context)
-
-@login_required
-@user_passes_test(is_admin)
-def view_staff(request):
-    query = request.GET.get('q')
-    if query:
-        staff_list = StaffProfile.objects.filter(name__icontains=query) | StaffProfile.objects.filter(designation__icontains=query)
-    else:
-        staff_list = StaffProfile.objects.all()
-    return render(request, 'accounts/view_staff.html', {'staff_list': staff_list})
-
 def home(request):
     return render(request, 'accounts/home.html')
 
@@ -158,7 +154,7 @@ def edit_staff(request, staff_id):
     if request.method == 'POST':
         staff.name = request.POST['name']
         staff.designation = request.POST['role']
-        staff.phone = request.POST['mobile']
+        staff.mobile = request.POST['mobile']
         staff.email = request.POST['email']
         staff.save()
         flash_messages.success(request, "Staff profile updated.")
@@ -201,3 +197,41 @@ def contact_view(request):
         )
         message_sent = True
     return render(request, 'accounts/contact.html', {'message_sent': message_sent})
+@login_required
+@user_passes_test(is_staff_user)
+def edit_staff(request, staff_id):
+    staff = get_object_or_404(StaffProfile, id=staff_id)
+    if request.method == 'POST':
+        staff.name = request.POST.get('name')
+        staff.designation = request.POST.get('designation')
+        staff.mobile = request.POST.get('mobile')
+        staff.email = request.POST.get('email')
+        staff.role = request.POST.get('role')
+        staff.save()
+        flash_messages.success(request, "Staff profile updated.")
+        return redirect('admin_dashboard')
+    return render(request, 'accounts/edit_staff.html', {'staff': staff})
+
+
+@login_required
+@user_passes_test(is_staff_user)
+def add_staff(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+
+        user = User.objects.create_user(username=username, password=password, email=email, is_staff=True)
+
+        StaffProfile.objects.create(
+            user=user,
+            name=request.POST.get('name'),
+            designation=request.POST.get('designation'),
+            mobile=request.POST.get('mobile'),
+            email=email,
+            role=request.POST.get('role')
+        )
+        flash_messages.success(request, "New staff profile created.")
+        return redirect('admin_dashboard')
+
+    return render(request, 'accounts/add_staff.html')
