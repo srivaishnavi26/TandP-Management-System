@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{load static}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/upload_verbal.css' %}">
+{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+    <h2>Upload Verbal Material</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="title">Title</label>
+        <input type="text" name="title" required>
+
+        <label for="file">File</label>
+        <input type="file" name="file" required>
+
+        <button type="submit" class="dashboard-button">Upload</button>
+    </form>
+</div>
+{% endblock %}

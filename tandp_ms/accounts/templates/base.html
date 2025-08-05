@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}T&PMS{% endblock %}</title>
+    <title>{% block title %}T&P{% endblock %}</title>
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/manage_drives.css' %}">
@@ -25,7 +25,6 @@
                 <li><a href="{% url 'contact' %}">Contact</a></li>
                 <li><a href="{% url 'team' %}">T&P Team</a></li>
                 <li><a href="{% url 'admin_login' %}">Admin Login</a></li>
-                <li><a href="{% url 'student_login' %}">Student Login</a></li>
             </ul>
         </div>
     </nav>

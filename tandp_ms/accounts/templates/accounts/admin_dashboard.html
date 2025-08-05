@@ -30,13 +30,11 @@
             <p class="card-number">{{ total_messages }}</p>
         </div>
     </div>
-
-    <div>
-        <a href="{% url 'add_drive' %}" class="dashboard-button">Add Drive</a>
-        <a href="{% url 'view_drives' %}" class="dashboard-button">View Drives</a>
-        <a href="{% url 'view_students' %}" class="dashboard-button">View Students</a>
-    </div>
-
+<div class="dashboard-actions">
+    <a href="{% url 'add_drive' %}" class="dashboard-button">Add Drive</a>
+    <a href="{% url 'view_drives' %}" class="dashboard-button">View Drives</a>
+    <a href="{% url 'view_students' %}" class="dashboard-button">View Students</a>
+</div>
     <hr>
 
     <h4>Your Profile</h4>
@@ -68,7 +66,11 @@
     <hr>
 
     <h4>All Staff Profiles</h4>
-    <a href="{% url 'add_staff' %}" class="dashboard-button">Add Staff</a>
+{% if request.user.is_superuser %}
+    <div class="dashboard-actions">
+        <a href="{% url 'add_staff' %}" class="dashboard-button">Add Staff</a>
+    </div>
+{% endif %}
 
     {% if staff_profiles %}
     <table class="message-table">
@@ -132,15 +134,12 @@
                 <td>{{ msg.name }}</td>
                 <td>{{ msg.email }}</td>
                 <td>{{ msg.message }}</td>
-<td>
-    <div class="staff-actions">
-        <form method="post" action="{% url 'delete_contact_message' msg.id %}">
-            {% csrf_token %}
-            <button type="submit" class="delete-button">Delete</button>
-        </form>
-    </div>
+<td class="message-delete-cell">
+    <form method="post" action="{% url 'delete_contact_message' msg.id %}">
+        {% csrf_token %}
+        <button type="submit" class="delete-button">Delete</button>
+    </form>
 </td>
-
             </tr>
             {% endfor %}
         </tbody>

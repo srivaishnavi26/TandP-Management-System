@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/staff_dashboard.css' %}">
+{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+    <h2>Welcome, {{ staff_profile.name }}</h2>
+
+    <div class="dashboard-cards">
+        <div class="dashboard-card">
+            <h5>Total Drives</h5>
+            <p class="card-number">{{ total_drives }}</p>
+        </div>
+        <div class="dashboard-card">
+            <h5>Upcoming Drives</h5>
+            <p class="card-number">{{ upcoming_drives }}</p>
+        </div>
+    </div>
+
+    <div class="dashboard-actions">
+
+        {% if role == "tpo" or role == "associate_tpo" or role == "head_corporate" %}
+            <a href="{% url 'add_drive' %}" class="dashboard-button">Add Drive</a>
+            <a href="{% url 'view_students' %}" class="dashboard-button">View Students</a>
+        {% endif %}
+
+        {% if role == "verbal_trainer" %}
+            <a href="{% url 'upload_verbal_material' %}" class="dashboard-button">Upload Verbal Material</a>
+        {% endif %}
+
+        {% if role == "aptitude_trainer" %}
+            <a href="#" class="dashboard-button">Upload Aptitude Test</a>
+        {% endif %}
+
+        {% if role == "department_coordinator" %}
+            <a href="#" class="dashboard-button">My Dept. Students</a>
+        {% endif %}
+
+        {% if role == "technical_trainer" or role == "global_trainer" %}
+            <a href="#" class="dashboard-button">Upload Technical Content</a>
+        {% endif %}
+
+        <a href="{% url 'logout' %}" class="dashboard-button danger-button">Logout</a>
+
+    </div>
+</div>
+{% endblock %}

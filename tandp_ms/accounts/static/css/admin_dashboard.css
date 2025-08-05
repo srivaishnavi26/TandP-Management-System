@@ -146,8 +146,8 @@ body {
     font-weight: 600;
 }
 
-.message-table td:last-child {
-    text-align: right;
+.message-table td:last-child:not(.message-delete-cell) {
+    text-align: center;
 }
 
 /* Action button wrapper */
@@ -185,6 +185,7 @@ form label {
 form input[type="text"],
 form input[type="email"],
 form input[type="tel"],
+form input[type="password"],
 form select,
 form textarea {
     width: 100%;
@@ -235,4 +236,43 @@ form button[type="submit"]:hover {
     .staff-actions .admin-button {
         width: 100%;
     }
+}
+.dashboard-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0;
+    text-align: center;
+}
+.contact-actions {
+    text-align: right;
+    vertical-align: middle;
+}
+
+.contact-actions form {
+    display: inline-block;
+    margin: 0;
+}
+.message-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.message-table th,
+.message-table td {
+    padding: 10px 15px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #ddd;
+}
+
+.message-delete-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.message-delete-cell form {
+    display: inline-block;
+    margin: 0;
 }

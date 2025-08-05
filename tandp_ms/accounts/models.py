@@ -52,3 +52,12 @@ class Registration(models.Model):
 
     def __str__(self):
         return f"{self.student.roll_number} registered for {self.drive.company_name}"
+
+class VerbalMaterial(models.Model):
+    title = models.CharField(max_length=200)
+    file = models.FileField(upload_to='verbal_materials/')
+    uploaded_by = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

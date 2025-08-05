@@ -12,8 +12,40 @@ def is_admin(user):
 def is_staff_user(user):
     return user.is_authenticated and user.is_staff
 
+def is_strict_admin(user):
+    return user.is_authenticated and user.is_superuser
+
+def is_strict_staff(user):
+    return user.is_authenticated and user.is_staff and not user.is_superuser
+
+def staff_login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user and user.is_authenticated and user.is_staff:
+            login(request, user)
+
+            staff_profile = StaffProfile.objects.filter(user=user).first()
+            if not staff_profile:
+                logout(request)
+                return render(request, 'accounts/staff_login.html', {
+                    'error': 'Your staff profile is not set up. Please contact admin.'
+                })
+
+            if user.is_superuser:
+                return redirect('admin_dashboard')
+            return redirect('staff_dashboard')
+        else:
+            return render(request, 'accounts/staff_login.html', {
+                'error': 'Invalid credentials or not a staff member.'
+            })
+
+    return render(request, 'accounts/staff_login.html')
+
 @login_required
-@user_passes_test(is_staff_user)
+@user_passes_test(is_strict_admin)
 def make_staff_admin(request, staff_id):
     staff = get_object_or_404(StaffProfile, id=staff_id)
     staff.user.is_staff = True
@@ -22,8 +54,8 @@ def make_staff_admin(request, staff_id):
     flash_messages.success(request, f"{staff.name} is now an admin.")
     return redirect('admin_dashboard')
 
-@login_required(login_url='admin_login')
-@user_passes_test(is_staff_user)
+@login_required
+@user_passes_test(is_strict_admin)
 def admin_dashboard(request):
     total_students = Student.objects.count()
     total_drives = PlacementDrive.objects.count()
@@ -44,6 +76,28 @@ def admin_dashboard(request):
         'total_messages': total_messages
     }
     return render(request, 'accounts/admin_dashboard.html', context)
+from django.contrib import messages as flash_messages
+
+@login_required
+@user_passes_test(is_strict_staff)
+def staff_dashboard(request):
+    staff_profile = StaffProfile.objects.filter(user=request.user).first()
+
+    if not staff_profile:
+        flash_messages.error(request, "No staff profile found for your account. Please contact the administrator.")
+        return redirect('home')  # or 'logout' or a custom error page
+
+    upcoming_drives = PlacementDrive.objects.filter(date__gte=timezone.now()).count()
+    total_drives = PlacementDrive.objects.count()
+
+    context = {
+        'staff_profile': staff_profile,
+        'role': staff_profile.role,
+        'upcoming_drives': upcoming_drives,
+        'total_drives': total_drives,
+    }
+    return render(request, 'accounts/staff_dashboard.html', context)
+
 def home(request):
     return render(request, 'accounts/home.html')
 
@@ -84,6 +138,14 @@ def register_for_drive(request, drive_id):
 
     return redirect('available_drives')
 
+@login_required
+@user_passes_test(is_staff_user)
+def view_drives(request):
+    drives = PlacementDrive.objects.all().order_by('-date')
+    return render(request, 'accounts/view_drives.html', {'drives': drives})
+
+@login_required
+@user_passes_test(is_staff_user)
 def add_drive(request):
     if request.method == 'POST':
         PlacementDrive.objects.create(
@@ -97,10 +159,8 @@ def add_drive(request):
         return redirect('view_drives')
     return render(request, 'accounts/add_drive.html')
 
-def view_drives(request):
-    drives = PlacementDrive.objects.all().order_by('-date')
-    return render(request, 'accounts/view_drives.html', {'drives': drives})
-
+@login_required
+@user_passes_test(is_staff_user)
 def edit_drive(request, drive_id):
     drive = get_object_or_404(PlacementDrive, id=drive_id)
     if request.method == 'POST':
@@ -114,6 +174,8 @@ def edit_drive(request, drive_id):
         return redirect('view_drives')
     return render(request, 'accounts/edit_drive.html', {'drive': drive})
 
+@login_required
+@user_passes_test(is_strict_admin)
 def delete_drive(request, drive_id):
     drive = get_object_or_404(PlacementDrive, id=drive_id)
     drive.delete()
@@ -131,7 +193,7 @@ def admin_login_view(request):
     return render(request, 'accounts/admin_login.html')
 
 @login_required
-@user_passes_test(is_staff_user)
+@user_passes_test(is_strict_admin)
 def delete_message(request, message_id):
     try:
         msg = ContactMessage.objects.get(id=message_id)
@@ -148,26 +210,50 @@ def view_students(request):
     return render(request, 'accounts/view_students.html', {'students': students})
 
 @login_required
-@user_passes_test(is_staff_user)
+@user_passes_test(is_strict_admin)
 def edit_staff(request, staff_id):
     staff = get_object_or_404(StaffProfile, id=staff_id)
     if request.method == 'POST':
-        staff.name = request.POST['name']
-        staff.designation = request.POST['role']
-        staff.mobile = request.POST['mobile']
-        staff.email = request.POST['email']
+        staff.name = request.POST.get('name')
+        staff.designation = request.POST.get('designation')
+        staff.mobile = request.POST.get('mobile')
+        staff.email = request.POST.get('email')
+        staff.role = request.POST.get('role')
         staff.save()
         flash_messages.success(request, "Staff profile updated.")
         return redirect('admin_dashboard')
     return render(request, 'accounts/edit_staff.html', {'staff': staff})
 
 @login_required
-@user_passes_test(is_staff_user)
+@user_passes_test(is_strict_admin)
 def delete_staff(request, staff_id):
     staff = get_object_or_404(StaffProfile, id=staff_id)
     staff.delete()
     flash_messages.success(request, "Staff profile deleted.")
     return redirect('admin_dashboard')
+
+@login_required
+@user_passes_test(is_strict_admin)
+def add_staff(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+
+        user = User.objects.create_user(username=username, password=password, email=email, is_staff=True)
+
+        StaffProfile.objects.create(
+            user=user,
+            name=request.POST.get('name'),
+            designation=request.POST.get('designation'),
+            mobile=request.POST.get('mobile'),
+            email=email,
+            role=request.POST.get('role')
+        )
+        flash_messages.success(request, "New staff profile created.")
+        return redirect('admin_dashboard')
+
+    return render(request, 'accounts/add_staff.html')
 
 def team_view(request):
     team_members = [
@@ -198,40 +284,16 @@ def contact_view(request):
         message_sent = True
     return render(request, 'accounts/contact.html', {'message_sent': message_sent})
 @login_required
-@user_passes_test(is_staff_user)
-def edit_staff(request, staff_id):
-    staff = get_object_or_404(StaffProfile, id=staff_id)
-    if request.method == 'POST':
-        staff.name = request.POST.get('name')
-        staff.designation = request.POST.get('designation')
-        staff.mobile = request.POST.get('mobile')
-        staff.email = request.POST.get('email')
-        staff.role = request.POST.get('role')
-        staff.save()
-        flash_messages.success(request, "Staff profile updated.")
-        return redirect('admin_dashboard')
-    return render(request, 'accounts/edit_staff.html', {'staff': staff})
-
-
-@login_required
-@user_passes_test(is_staff_user)
-def add_staff(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
-
-        user = User.objects.create_user(username=username, password=password, email=email, is_staff=True)
-
-        StaffProfile.objects.create(
-            user=user,
-            name=request.POST.get('name'),
-            designation=request.POST.get('designation'),
-            mobile=request.POST.get('mobile'),
-            email=email,
-            role=request.POST.get('role')
+@user_passes_test(lambda u: u.is_authenticated and StaffProfile.objects.filter(user=u, role='verbal_trainer').exists())
+def upload_verbal_material(request):
+    if request.method == 'POST' and request.FILES.get('file'):
+        staff_profile = StaffProfile.objects.get(user=request.user)
+        VerbalMaterial.objects.create(
+            title=request.POST.get('title'),
+            file=request.FILES['file'],
+            uploaded_by=staff_profile
         )
-        flash_messages.success(request, "New staff profile created.")
-        return redirect('admin_dashboard')
+        flash_messages.success(request, "Material uploaded successfully.")
+        return redirect('upload_verbal_material')
 
-    return render(request, 'accounts/add_staff.html')
+    return render(request, 'accounts/upload_verbal.html')
