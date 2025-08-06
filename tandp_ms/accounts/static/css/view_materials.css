@@ -1,30 +1,89 @@
+/* view_materials.css */
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
 .dashboard-container {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
 }
 
 .material-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
-.material-table th, .material-table td {
-    padding: 12px 15px;
+.material-table thead {
+    background-color: #ffa94d;
+    color: #fff;
+}
+
+.material-table th,
+.material-table td {
+    padding: 14px 12px;
     border: 1px solid #ddd;
-    text-align: left;
+    text-align: center;
+}
+
+.material-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
 .dashboard-button {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
     background-color: #ffa94d;
-    padding: 6px 16px;
-    border-radius: 8px;
-    text-decoration: none;
     color: white;
-    transition: 0.3s;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
 .dashboard-button:hover {
     background-color: #ff8800;
+}
+
+p {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 40px;
+    color: #666;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .dashboard-container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .material-table th,
+    .material-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .dashboard-button {
+        font-size: 13px;
+    }
 }

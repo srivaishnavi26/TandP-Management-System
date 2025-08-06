@@ -25,5 +25,36 @@
 
         <button type="submit" class="dashboard-button">Upload</button>
     </form>
+
+    {% if materials %}
+    <h3 style="margin-top: 40px;">Your Uploaded Materials</h3>
+    <table class="materials-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Uploaded At</th>
+                <th>Download</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materials %}
+            <tr>
+                <td>{{ material.title }}</td>
+                <td>{{ material.uploaded_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                    <a href="{{ material.file.url }}" class="table-button" download>Download</a>
+                </td>
+                <td>
+                    <form method="post" action="{% url 'delete_verbal_material' material.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="table-button danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 </div>
 {% endblock %}

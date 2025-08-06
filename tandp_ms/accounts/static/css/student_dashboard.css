@@ -3,6 +3,8 @@
 body {
     background-color: #f9f9f9;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 .student-dashboard-container {
@@ -18,6 +20,7 @@ body {
     color: #333;
     font-size: 28px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .dashboard-section {
@@ -30,19 +33,10 @@ body {
     margin-bottom: 10px;
 }
 
-.dashboard-button {
-    background-color: #ffa94d;
-    color: white;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-}
-
-.dashboard-button:hover {
-    background-color: #ff8800;
+.dashboard-section p {
+    font-size: 16px;
+    color: #555;
+    margin: 0;
 }
 
 .resume-link {
@@ -55,6 +49,38 @@ body {
 .resume-link:hover {
     color: #0056b3;
 }
+
+/* FLEX GRID FOR BUTTONS */
+.dashboard-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding: 10px;
+}
+
+/* BUTTON STYLE */
+.dashboard-button {
+    background-color: #ffa94d;
+    color: white;
+    padding: 15px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    min-width: 240px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-button:hover {
+    background-color: #ff8800;
+}
+
 .dashboard-button.logout {
     background-color: #e74c3c;
 }

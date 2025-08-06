@@ -15,6 +15,7 @@
             <tr>
                 <th>Title</th>
                 <th>Uploaded At</th>
+                <th>Uploaded By</th>
                 <th>Download</th>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
             <tr>
                 <td>{{ test.title }}</td>
                 <td>{{ test.uploaded_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ test.uploaded_by.name }}</td>
                 <td><a href="{{ test.file.url }}" class="dashboard-button" download>Download</a></td>
             </tr>
             {% endfor %}

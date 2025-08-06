@@ -393,12 +393,12 @@ def upload_aptitude_test(request):
     if request.method == 'POST':
         title = request.POST['title']
         file = request.FILES['file']
-        staff = request.user.staffprofile
+        staff= StaffProfile.objects.get(user=request.user)
         AptitudeTest.objects.create(title=title, file=file, uploaded_by=staff)
         flash_messages.success(request, "Aptitude test uploaded successfully.")
         return redirect('upload_aptitude_test')
 
-    tests = AptitudeTest.objects.filter(uploaded_by=request.user.staffprofile)
+    tests = AptitudeTest.objects.filter(uploaded_by_user=request.user)
     return render(request, 'accounts/upload_aptitude.html', {'tests': tests})
 @login_required
 def view_aptitude_tests(request):

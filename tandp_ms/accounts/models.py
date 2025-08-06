@@ -59,10 +59,15 @@ class VerbalMaterial(models.Model):
     uploaded_by = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
+
     def __str__(self):
         return self.title
+
 class AptitudeTest(models.Model):
     title = models.CharField(max_length=200)
     file = models.FileField(upload_to='aptitude_tests/')
-    uploaded_by = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(StaffProfile, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.title
