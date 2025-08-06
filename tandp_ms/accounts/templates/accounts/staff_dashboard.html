@@ -44,5 +44,37 @@
         <a href="{% url 'logout' %}" class="dashboard-button danger-button">Logout</a>
 
     </div>
+    {% if role == "verbal_trainer" and verbal_materials %}
+<h3 style="margin-top: 40px;">Your Uploaded Verbal Materials</h3>
+<table class="materials-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Uploaded At</th>
+            <th>Download</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for material in verbal_materials %}
+        <tr>
+            <td>{{ material.title }}</td>
+            <td>{{ material.uploaded_at|date:"Y-m-d H:i" }}</td>
+            <td>
+                <a href="{{ material.file.url }}" class="table-button" download>Download</a>
+            </td>
+
+            <td>
+                <form method="post" action="{% url 'delete_verbal_material' material.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="table-button danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
 </div>
 {% endblock %}

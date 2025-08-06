@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Your Registered Drives</h2>
+
+    {% if registrations %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Date</th>
+                    <th>Package</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reg in registrations %}
+                    <tr>
+                        <td>{{ reg.drive.company_name }}</td>
+                        <td>{{ reg.drive.job_role }}</td>
+                        <td>{{ reg.drive.date }}</td>
+                        <td>{{ reg.drive.package }}</td>
+                        <td>{{ reg.drive.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have not registered for any drives yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

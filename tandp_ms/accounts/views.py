@@ -3,8 +3,18 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages as flash_messages
 from django.utils import timezone
-from .models import ContactMessage, Student, PlacementDrive, Registration, StaffProfile
 from django.contrib.auth.models import User
+
+from .models import (
+    ContactMessage,
+    Student,
+    PlacementDrive,
+    Registration,
+    StaffProfile,
+    VerbalMaterial
+)
+
+# ========== Access Control ==========
 
 def is_admin(user):
     return user.is_superuser
@@ -17,6 +27,33 @@ def is_strict_admin(user):
 
 def is_strict_staff(user):
     return user.is_authenticated and user.is_staff and not user.is_superuser
+
+# ========== Student Login & Dashboard ==========
+
+def student_login(request):
+    if request.method == 'POST':
+        roll_number = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=roll_number, password=password)
+
+        if user and not user.is_staff and not user.is_superuser:
+            login(request, user)
+            return redirect('student_dashboard')
+        else:
+            flash_messages.error(request, "Invalid roll number or password.")
+
+    return render(request, 'accounts/student_login.html')
+
+@login_required
+def student_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return redirect('home')
+
+    student = get_object_or_404(Student, user=request.user)
+    return render(request, 'accounts/student_dashboard.html', {'student': student})
+
+# ========== Staff/Admin Login ==========
 
 def staff_login_view(request):
     if request.method == 'POST':
@@ -44,15 +81,7 @@ def staff_login_view(request):
 
     return render(request, 'accounts/staff_login.html')
 
-@login_required
-@user_passes_test(is_strict_admin)
-def make_staff_admin(request, staff_id):
-    staff = get_object_or_404(StaffProfile, id=staff_id)
-    staff.user.is_staff = True
-    staff.user.is_superuser = True
-    staff.user.save()
-    flash_messages.success(request, f"{staff.name} is now an admin.")
-    return redirect('admin_dashboard')
+# ========== Dashboards ==========
 
 @login_required
 @user_passes_test(is_strict_admin)
@@ -76,7 +105,6 @@ def admin_dashboard(request):
         'total_messages': total_messages
     }
     return render(request, 'accounts/admin_dashboard.html', context)
-from django.contrib import messages as flash_messages
 
 @login_required
 @user_passes_test(is_strict_staff)
@@ -84,8 +112,8 @@ def staff_dashboard(request):
     staff_profile = StaffProfile.objects.filter(user=request.user).first()
 
     if not staff_profile:
-        flash_messages.error(request, "No staff profile found for your account. Please contact the administrator.")
-        return redirect('home')  # or 'logout' or a custom error page
+        flash_messages.error(request, "No staff profile found for your account.")
+        return redirect('home')
 
     upcoming_drives = PlacementDrive.objects.filter(date__gte=timezone.now()).count()
     total_drives = PlacementDrive.objects.count()
@@ -96,47 +124,14 @@ def staff_dashboard(request):
         'upcoming_drives': upcoming_drives,
         'total_drives': total_drives,
     }
+
+    if staff_profile.role == 'verbal_trainer':
+        verbal_materials = VerbalMaterial.objects.filter(uploaded_by=staff_profile).order_by('-uploaded_at')
+        context['verbal_materials'] = verbal_materials
+
     return render(request, 'accounts/staff_dashboard.html', context)
 
-def home(request):
-    return render(request, 'accounts/home.html')
-
-def about(request):
-    return render(request, 'accounts/about.html')
-
-def logout_view(request):
-    logout(request)
-    return redirect('home')
-
-def student_login(request):
-    return render(request, 'accounts/student_login.html')
-
-def available_drives(request):
-    student_email = request.session.get('student_email')
-    if not student_email:
-        return redirect('student_login')
-
-    student = get_object_or_404(Student, email=student_email)
-    registered_drive_ids = Registration.objects.filter(student=student).values_list('drive_id', flat=True)
-    drives = PlacementDrive.objects.exclude(id__in=registered_drive_ids).order_by('date')
-
-    return render(request, 'accounts/available_drives.html', {'student': student, 'drives': drives})
-
-def register_for_drive(request, drive_id):
-    student_email = request.session.get('student_email')
-    if not student_email:
-        return redirect('student_login')
-
-    student = get_object_or_404(Student, email=student_email)
-    drive = get_object_or_404(PlacementDrive, id=drive_id)
-
-    if not Registration.objects.filter(student=student, drive=drive).exists():
-        Registration.objects.create(student=student, drive=drive)
-        flash_messages.success(request, f"Successfully registered for {drive.company_name}")
-    else:
-        flash_messages.warning(request, "You have already registered for this drive.")
-
-    return redirect('available_drives')
+# ========== Placement Drive ==========
 
 @login_required
 @user_passes_test(is_staff_user)
@@ -182,32 +177,97 @@ def delete_drive(request, drive_id):
     flash_messages.success(request, "Drive deleted successfully.")
     return redirect('view_drives')
 
+# ========== Registration for Drives ==========
+
+@login_required
+def available_drives(request):
+    student = get_object_or_404(Student, user=request.user)
+    registered_drive_ids = Registration.objects.filter(student=student).values_list('drive_id', flat=True)
+    drives = PlacementDrive.objects.exclude(id__in=registered_drive_ids).order_by('date')
+
+    return render(request, 'accounts/available_drives.html', {'student': student, 'drives': drives})
+
+@login_required
+def register_for_drive(request, drive_id):
+    student = get_object_or_404(Student, user=request.user)
+    drive = get_object_or_404(PlacementDrive, id=drive_id)
+
+    if not Registration.objects.filter(student=student, drive=drive).exists():
+        Registration.objects.create(student=student, drive=drive)
+        flash_messages.success(request, f"Successfully registered for {drive.company_name}")
+    else:
+        flash_messages.warning(request, "You have already registered for this drive.")
+
+    return redirect('available_drives')
+
+# ========== Verbal Material ==========
+
+@login_required
+@user_passes_test(lambda u: u.is_authenticated and StaffProfile.objects.filter(user=u, role='verbal_trainer').exists())
+def upload_verbal_material(request):
+    staff_profile = StaffProfile.objects.get(user=request.user)
+
+    if request.method == 'POST' and request.FILES.get('file'):
+        VerbalMaterial.objects.create(
+            title=request.POST.get('title'),
+            file=request.FILES['file'],
+            uploaded_by=staff_profile
+        )
+        flash_messages.success(request, "Material uploaded successfully.")
+        return redirect('upload_verbal_material')
+
+    materials = VerbalMaterial.objects.filter(uploaded_by=staff_profile).order_by('-uploaded_at')
+    return render(request, 'accounts/upload_verbal.html', {'materials': materials})
+
+@login_required
+def delete_verbal_material(request, material_id):
+    if request.method == 'POST':
+        material = get_object_or_404(VerbalMaterial, id=material_id)
+        material.file.delete()
+        material.delete()
+        flash_messages.success(request, "Material deleted successfully.")
+    return redirect('staff_dashboard')
+
+# ========== Staff Management ==========
 def admin_login_view(request):
     if request.method == 'POST':
-        user = authenticate(request, username=request.POST.get('username'), password=request.POST.get('password'))
-        if user is not None and user.is_staff:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None and user.is_superuser:
             login(request, user)
-            return redirect('admin_dashboard')
+            return redirect('admin_dashboard')  # make sure this name exists in urls.py
         else:
-            return render(request, 'accounts/admin_login.html', {'error': 'Invalid credentials or not an admin.'})
+            return render(request, 'accounts/admin_login.html', {
+                'error': 'Invalid admin credentials.'
+            })
+
     return render(request, 'accounts/admin_login.html')
 
 @login_required
 @user_passes_test(is_strict_admin)
-def delete_message(request, message_id):
-    try:
-        msg = ContactMessage.objects.get(id=message_id)
-        msg.delete()
-        flash_messages.success(request, "Message deleted successfully.")
-    except ContactMessage.DoesNotExist:
-        flash_messages.error(request, "Message not found.")
-    return redirect('admin_dashboard')
+def add_staff(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
 
-@login_required
-@user_passes_test(is_staff_user)
-def view_students(request):
-    students = Student.objects.all().order_by('roll_number')
-    return render(request, 'accounts/view_students.html', {'students': students})
+        user = User.objects.create_user(username=username, password=password, email=email, is_staff=True)
+
+        StaffProfile.objects.create(
+            user=user,
+            name=request.POST.get('name'),
+            designation=request.POST.get('designation'),
+            mobile=request.POST.get('mobile'),
+            email=email,
+            role=request.POST.get('role')
+        )
+        flash_messages.success(request, "New staff profile created.")
+        return redirect('admin_dashboard')
+
+    return render(request, 'accounts/add_staff.html')
 
 @login_required
 @user_passes_test(is_strict_admin)
@@ -234,26 +294,54 @@ def delete_staff(request, staff_id):
 
 @login_required
 @user_passes_test(is_strict_admin)
-def add_staff(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
+def make_staff_admin(request, staff_id):
+    staff = get_object_or_404(StaffProfile, id=staff_id)
+    staff.user.is_staff = True
+    staff.user.is_superuser = True
+    staff.user.save()
+    flash_messages.success(request, f"{staff.name} is now an admin.")
+    return redirect('admin_dashboard')
 
-        user = User.objects.create_user(username=username, password=password, email=email, is_staff=True)
+# ========== Others ==========
 
-        StaffProfile.objects.create(
-            user=user,
-            name=request.POST.get('name'),
-            designation=request.POST.get('designation'),
-            mobile=request.POST.get('mobile'),
-            email=email,
-            role=request.POST.get('role')
+def home(request):
+    return render(request, 'accounts/home.html')
+
+def about(request):
+    return render(request, 'accounts/about.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+@login_required
+@user_passes_test(is_staff_user)
+def view_students(request):
+    students = Student.objects.all().order_by('roll_number')
+    return render(request, 'accounts/view_students.html', {'students': students})
+
+@login_required
+@user_passes_test(is_strict_admin)
+def delete_message(request, message_id):
+    try:
+        msg = ContactMessage.objects.get(id=message_id)
+        msg.delete()
+        flash_messages.success(request, "Message deleted successfully.")
+    except ContactMessage.DoesNotExist:
+        flash_messages.error(request, "Message not found.")
+    return redirect('admin_dashboard')
+
+def contact_view(request):
+    message_sent = False
+    if request.method == "POST":
+        ContactMessage.objects.create(
+            name=request.POST.get("name"),
+            email=request.POST.get("email"),
+            subject=request.POST.get("subject"),
+            message=request.POST.get("message")
         )
-        flash_messages.success(request, "New staff profile created.")
-        return redirect('admin_dashboard')
-
-    return render(request, 'accounts/add_staff.html')
+        message_sent = True
+    return render(request, 'accounts/contact.html', {'message_sent': message_sent})
 
 def team_view(request):
     team_members = [
@@ -271,29 +359,22 @@ def team_view(request):
         {"sno": 12, "name": "Mr. V Naveen Kumar", "designation": "Clerk – AIRP", "mobile": "9398023404", "email": "clerk.tpcell@srit.ac.in"},
     ]
     return render(request, 'accounts/team.html', {'team_members': team_members})
-
-def contact_view(request):
-    message_sent = False
-    if request.method == "POST":
-        ContactMessage.objects.create(
-            name=request.POST.get("name"),
-            email=request.POST.get("email"),
-            subject=request.POST.get("subject"),
-            message=request.POST.get("message")
-        )
-        message_sent = True
-    return render(request, 'accounts/contact.html', {'message_sent': message_sent})
 @login_required
-@user_passes_test(lambda u: u.is_authenticated and StaffProfile.objects.filter(user=u, role='verbal_trainer').exists())
-def upload_verbal_material(request):
-    if request.method == 'POST' and request.FILES.get('file'):
-        staff_profile = StaffProfile.objects.get(user=request.user)
-        VerbalMaterial.objects.create(
-            title=request.POST.get('title'),
-            file=request.FILES['file'],
-            uploaded_by=staff_profile
-        )
-        flash_messages.success(request, "Material uploaded successfully.")
-        return redirect('upload_verbal_material')
+def registered_drives(request):
+    student = get_object_or_404(Student, user=request.user)
+    registrations = Registration.objects.filter(student=student).select_related('drive').order_by('drive__date')
 
-    return render(request, 'accounts/upload_verbal.html')
+    return render(request, 'accounts/registered_drives.html', {
+        'student': student,
+        'registrations': registrations
+    })
+@login_required
+def upload_resume(request):
+    student = get_object_or_404(Student, user=request.user)
+
+    if request.method == 'POST' and request.FILES.get('resume'):
+        student.resume = request.FILES['resume']
+        student.save()
+        flash_messages.success(request, "Resume uploaded successfully.")
+
+    return render(request, 'accounts/upload_resume.html', {'student': student})

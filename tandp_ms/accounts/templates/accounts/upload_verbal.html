@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
-{load static}
+{% load static %}
+
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/upload_verbal.css' %}">
+<link rel="stylesheet" href="{% static 'css/upload_verbal.css' %}">
 {% endblock %}
+
 {% block content %}
 <div class="dashboard-container">
     <h2>Upload Verbal Material</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="title">Title</label>
@@ -16,5 +25,31 @@
 
         <button type="submit" class="dashboard-button">Upload</button>
     </form>
+
+    {% if materials %}
+    <h3 style="margin-top: 40px;">Uploaded Materials</h3>
+    <table class="message-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Uploaded By</th>
+                <th>Uploaded At</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materials %}
+            <tr>
+                <td>{{ material.title }}</td>
+                <td>{{ material.uploaded_by.name }}</td>
+                <td>{{ material.uploaded_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                    <a href="{{ material.file.url }}" class="dashboard-button" download>Download</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 </div>
 {% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Available Placement Drives</h2>
+
+    {% if drives %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Date</th>
+                    <th>Package</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for drive in drives %}
+                    <tr>
+                        <td>{{ drive.company_name }}</td>
+                        <td>{{ drive.job_role }}</td>
+                        <td>{{ drive.date }}</td>
+                        <td>{{ drive.package }}</td>
+                        <td>{{ drive.description }}</td>
+                        <td>
+                            <form action="{% url 'register_for_drive' drive.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit">Register</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No drives currently available.</p>
+    {% endif %}
+</div>
+{% endblock %}

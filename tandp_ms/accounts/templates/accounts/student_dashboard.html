@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Welcome, {{ student.full_name }}</h2>
+
+    <div class="student-details">
+        <p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
+        <p><strong>Branch:</strong> {{ student.branch }}</p>
+        <p><strong>Graduation Year:</strong> {{ student.graduation_year }}</p>
+        <p><strong>Email:</strong> {{ student.roll_number|lower }}@srit.ac.in</p>
+
+        {% if student.resume %}
+            <p><strong>Resume:</strong> <a href="{{ student.resume.url }}" target="_blank">View</a></p>
+        {% else %}
+            <p><strong>Resume:</strong> Not uploaded</p>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-actions">
+        <a href="{% url 'available_drives' %}" class="btn">Register for Drives</a>
+        <a href="{% url 'registered_drives' %}" class="btn">View Registered Drives</a>
+        <a href="{% url 'upload_resume' %}" class="btn">Upload Resume</a>
+    </div>
+</div>
+{% endblock %}

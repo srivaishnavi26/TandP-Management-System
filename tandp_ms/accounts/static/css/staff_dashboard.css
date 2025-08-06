@@ -11,7 +11,6 @@ body {
     margin: 40px auto;
     padding: 30px;
     background-color: #fff;
-    margin-top: 0px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
@@ -88,6 +87,57 @@ body {
     background-color: #c82333;
 }
 
+.materials-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+}
+
+.materials-table th,
+.materials-table td {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.materials-table th {
+    background-color: #f7f7f7;
+    font-weight: 600;
+    color: #333;
+}
+
+.materials-table td {
+    background-color: #ffffff;
+}
+
+.table-button {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    background-color: #ffa94d;
+    color: #fff;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.table-button:hover {
+    background-color: #ff8800;
+}
+
+.table-button.danger {
+    background-color: #dc3545;
+}
+
+.table-button.danger:hover {
+    background-color: #c82333;
+}
+
 @media screen and (max-width: 768px) {
     .dashboard-cards {
         flex-direction: column;
@@ -101,5 +151,16 @@ body {
 
     .dashboard-button {
         width: 90%;
+    }
+
+    .materials-table th,
+    .materials-table td {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .table-button {
+        font-size: 12px;
+        padding: 5px 10px;
     }
 }
