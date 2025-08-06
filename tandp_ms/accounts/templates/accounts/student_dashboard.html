@@ -1,27 +1,44 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/student_dashboard.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="dashboard-container">
+<div class="student-dashboard-container">
     <h2>Welcome, {{ student.full_name }}</h2>
 
-    <div class="student-details">
-        <p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
-        <p><strong>Branch:</strong> {{ student.branch }}</p>
-        <p><strong>Graduation Year:</strong> {{ student.graduation_year }}</p>
-        <p><strong>Email:</strong> {{ student.roll_number|lower }}@srit.ac.in</p>
+    <div class="dashboard-section">
+        <h3>Roll Number</h3>
+        <p>{{ student.roll_number }}</p>
+    </div>
 
+    <div class="dashboard-section">
+        <h3>Branch</h3>
+        <p>{{ student.branch }}</p>
+    </div>
+
+    <div class="dashboard-section">
+        <h3>Graduation Year</h3>
+        <p>{{ student.graduation_year }}</p>
+    </div>
+
+    <div class="dashboard-section">
+        <h3>Resume</h3>
         {% if student.resume %}
-            <p><strong>Resume:</strong> <a href="{{ student.resume.url }}" target="_blank">View</a></p>
+            <a class="resume-link" href="{{ student.resume.url }}" target="_blank">View Resume</a>
         {% else %}
-            <p><strong>Resume:</strong> Not uploaded</p>
+            <p>No resume uploaded.</p>
         {% endif %}
     </div>
 
-    <div class="dashboard-actions">
-        <a href="{% url 'available_drives' %}" class="btn">Register for Drives</a>
-        <a href="{% url 'registered_drives' %}" class="btn">View Registered Drives</a>
-        <a href="{% url 'upload_resume' %}" class="btn">Upload Resume</a>
+    <div class="dashboard-section">
+    <a href="{% url 'available_drives' %}" class="dashboard-button">View Available Drives</a>
+    <a href="{% url 'registered_drives' %}" class="dashboard-button">View Registered Drives</a>
+    <a href="{% url 'upload_resume' %}" class="dashboard-button">Upload Resume</a>
+    <a href="{% url 'logout' %}" class="dashboard-button logout">Logout</a>
     </div>
+
 </div>
 {% endblock %}
