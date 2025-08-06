@@ -1,0 +1,70 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.container p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.container a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+input[type="file"] {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+}
+
+button[type="submit"] {
+    padding: 10px 18px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    background-color: #ffa94d;
+    color: white;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #ff8800;
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+}

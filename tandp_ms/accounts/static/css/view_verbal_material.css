@@ -1,0 +1,86 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.dashboard-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.materials-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.materials-table thead {
+    background-color: #ffa94d;
+    color: #fff;
+}
+
+.materials-table th,
+.materials-table td {
+    padding: 14px 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.materials-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.dashboard-button {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: #ffa94d;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-button:hover {
+    background-color: #ff8800;
+}
+
+p {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 40px;
+    color: #666;
+}
+
+@media screen and (max-width: 768px) {
+    .dashboard-container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .materials-table th,
+    .materials-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .dashboard-button {
+        font-size: 13px;
+    }
+}

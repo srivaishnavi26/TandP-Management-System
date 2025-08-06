@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/view_materials.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Aptitude Materials</h2>
+
+    {% if tests %}
+    <table class="material-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Uploaded At</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for test in tests %}
+            <tr>
+                <td>{{ test.title }}</td>
+                <td>{{ test.uploaded_at|date:"Y-m-d H:i" }}</td>
+                <td><a href="{{ test.file.url }}" class="dashboard-button" download>Download</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No materials available yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

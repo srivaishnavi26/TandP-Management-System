@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/view_verbal_material.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Verbal Learning Materials</h2>
+
+    {% if materials %}
+    <table class="materials-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Uploaded By</th>
+                <th>Uploaded At</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materials %}
+            <tr>
+                <td>{{ material.title }}</td>
+                <td>{{ material.uploaded_by.name }}</td>
+                <td>{{ material.uploaded_at|date:"Y-m-d H:i" }}</td>
+                <td><a href="{{ material.file.url }}" class="dashboard-button" download>Download</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No verbal materials available yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

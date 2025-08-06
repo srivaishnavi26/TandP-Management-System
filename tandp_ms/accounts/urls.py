@@ -32,6 +32,8 @@ urlpatterns = [
     # Student Management (Staff/Admin)
     path('view_students/', views.view_students, name='view_students'),
     path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
+    path('view-verbal-material/', views.view_verbal_material, name='view_verbal_material'),
+    path('upload_aptitude/', views.upload_aptitude_test, name='upload_aptitude_test'),
 
     # Drive Management (Staff/Admin)
     path('add_drive/', views.add_drive, name='add_drive'),
@@ -45,6 +47,8 @@ urlpatterns = [
     # Contact Message Management (Admin)
     path('delete_message/<int:message_id>/', views.delete_message, name='delete_contact_message'),
     path('upload-resume/', views.upload_resume, name='upload_resume'),
+
+    path('view_aptitude_tests/', views.view_aptitude_tests, name='view_aptitude_tests'),
 
 ]
 if settings.DEBUG:

@@ -4,14 +4,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages as flash_messages
 from django.utils import timezone
 from django.contrib.auth.models import User
-
 from .models import (
     ContactMessage,
     Student,
     PlacementDrive,
     Registration,
     StaffProfile,
-    VerbalMaterial
+    VerbalMaterial,
+    AptitudeTest
 )
 
 # ========== Access Control ==========
@@ -128,6 +128,9 @@ def staff_dashboard(request):
     if staff_profile.role == 'verbal_trainer':
         verbal_materials = VerbalMaterial.objects.filter(uploaded_by=staff_profile).order_by('-uploaded_at')
         context['verbal_materials'] = verbal_materials
+    if staff_profile.role == 'aptitude_trainer':
+        aptitude_tests = AptitudeTest.objects.filter(uploaded_by=staff_profile).order_by('-uploaded_at')
+        context['aptitude_tests'] = aptitude_tests
 
     return render(request, 'accounts/staff_dashboard.html', context)
 
@@ -378,3 +381,26 @@ def upload_resume(request):
         flash_messages.success(request, "Resume uploaded successfully.")
 
     return render(request, 'accounts/upload_resume.html', {'student': student})
+from .models import VerbalMaterial
+
+@login_required
+def view_verbal_material(request):
+    materials = VerbalMaterial.objects.all()
+    return render(request, 'accounts/view_verbal_material.html', {'materials': materials})
+@login_required
+@user_passes_test(is_staff_user)
+def upload_aptitude_test(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        file = request.FILES['file']
+        staff = request.user.staffprofile
+        AptitudeTest.objects.create(title=title, file=file, uploaded_by=staff)
+        flash_messages.success(request, "Aptitude test uploaded successfully.")
+        return redirect('upload_aptitude_test')
+
+    tests = AptitudeTest.objects.filter(uploaded_by=request.user.staffprofile)
+    return render(request, 'accounts/upload_aptitude.html', {'tests': tests})
+@login_required
+def view_aptitude_tests(request):
+    tests = AptitudeTest.objects.all().order_by('-uploaded_at')
+    return render(request, 'accounts/view_aptitude_tests.html', {'tests': tests})

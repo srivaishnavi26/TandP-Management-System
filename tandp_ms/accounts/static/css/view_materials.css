@@ -1,0 +1,30 @@
+.dashboard-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.material-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+.material-table th, .material-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.dashboard-button {
+    background-color: #ffa94d;
+    padding: 6px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+.dashboard-button:hover {
+    background-color: #ff8800;
+}

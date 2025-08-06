@@ -37,7 +37,7 @@ class PlacementDrive(models.Model):
     company_name = models.CharField(max_length=100)
     job_role = models.CharField(max_length=100)
     date = models.DateField()
-    package = models.DecimalField(max_digits=10, decimal_places=2)
+    package = models.CharField(max_length=50)
     description = models.TextField()
 
     def __str__(self):
@@ -61,3 +61,8 @@ class VerbalMaterial(models.Model):
 
     def __str__(self):
         return self.title
+class AptitudeTest(models.Model):
+    title = models.CharField(max_length=200)
+    file = models.FileField(upload_to='aptitude_tests/')
+    uploaded_by = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
+    uploaded_at = models.DateTimeField(auto_now_add=True)

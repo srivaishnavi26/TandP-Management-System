@@ -23,6 +23,7 @@
         {% if role == "tpo" or role == "associate_tpo" or role == "head_corporate" %}
             <a href="{% url 'add_drive' %}" class="dashboard-button">Add Drive</a>
             <a href="{% url 'view_students' %}" class="dashboard-button">View Students</a>
+            <a href="{% url 'view_drives' %}" class="dashboard-button">View Drives</a>  {# ✅ Newly added line #}
         {% endif %}
 
         {% if role == "verbal_trainer" %}
@@ -30,7 +31,7 @@
         {% endif %}
 
         {% if role == "aptitude_trainer" %}
-            <a href="#" class="dashboard-button">Upload Aptitude Test</a>
+            <a href="{% url 'upload_aptitude_test' %}" class="dashboard-button">Upload Aptitude Test</a>
         {% endif %}
 
         {% if role == "department_coordinator" %}
@@ -44,31 +45,54 @@
         <a href="{% url 'logout' %}" class="dashboard-button danger-button">Logout</a>
 
     </div>
+
     {% if role == "verbal_trainer" and verbal_materials %}
-<h3 style="margin-top: 40px;">Your Uploaded Verbal Materials</h3>
+    <h3 style="margin-top: 40px;">Your Uploaded Verbal Materials</h3>
+    <table class="materials-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Uploaded At</th>
+                <th>Download</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in verbal_materials %}
+            <tr>
+                <td>{{ material.title }}</td>
+                <td>{{ material.uploaded_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                    <a href="{{ material.file.url }}" class="table-button" download>Download</a>
+                </td>
+                <td>
+                    <form method="post" action="{% url 'delete_verbal_material' material.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="table-button danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+{% if role == "aptitude_trainer" and aptitude_tests %}
+<h3 style="margin-top: 40px;">Your Uploaded Aptitude Tests</h3>
 <table class="materials-table">
     <thead>
         <tr>
             <th>Title</th>
             <th>Uploaded At</th>
             <th>Download</th>
-            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
-        {% for material in verbal_materials %}
+        {% for test in aptitude_tests %}
         <tr>
-            <td>{{ material.title }}</td>
-            <td>{{ material.uploaded_at|date:"Y-m-d H:i" }}</td>
+            <td>{{ test.title }}</td>
+            <td>{{ test.uploaded_at|date:"Y-m-d H:i" }}</td>
             <td>
-                <a href="{{ material.file.url }}" class="table-button" download>Download</a>
-            </td>
-
-            <td>
-                <form method="post" action="{% url 'delete_verbal_material' material.id %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="table-button danger">Delete</button>
-                </form>
+                <a href="{{ test.file.url }}" class="table-button" download>Download</a>
             </td>
         </tr>
         {% endfor %}

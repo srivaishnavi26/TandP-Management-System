@@ -1,0 +1,105 @@
+/* Layout fix to keep footer minimal */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* Page container grows to fill vertical space */
+.container {
+    flex: 1;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Heading */
+.container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table thead {
+    background-color: #ffa94d;
+    color: #fff;
+}
+
+table th, table td {
+    padding: 14px 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Register button */
+button[type="submit"] {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: #ffa94d;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #ff8800;
+}
+
+/* Empty drives message */
+p {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 40px;
+    color: #666;
+}
+
+/* Footer fix */
+.site-footer {
+    background-color: #ffffff !important;
+    border-top: 1px solid #ddd;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    margin-top: auto;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    table th, table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    button[type="submit"] {
+        font-size: 13px;
+    }
+}

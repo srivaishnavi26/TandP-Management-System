@@ -8,9 +8,12 @@
 {% block content %}
 <div class="login-container">
     <h2>Student Login</h2>
-    {% if error %}
-        <p class="error-message">{{ error }}</p>
+    {% if messages %}
+    {% for message in messages %}
+        <p class="error-message">{{ message }}</p>
+    {% endfor %}
     {% endif %}
+
     <form method="post" action="{% url 'student_login' %}" class="login-form">
         {% csrf_token %}
         <label for="username">Roll Number</label>

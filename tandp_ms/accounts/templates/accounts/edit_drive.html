@@ -17,7 +17,7 @@
         <input type="text" name="job_role" value="{{ drive.job_role }}" required>
 
         <label>Date:</label>
-        <input type="date" name="date" value="{{ drive.date }}" required>
+        <input type="date" name="date" value="{{ drive.date|date:'Y-m-d' }}">
 
         <label>Package:</label>
         <input type="text" name="package" value="{{ drive.package }}" required>
