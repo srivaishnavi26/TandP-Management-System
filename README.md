@@ -1,4 +1,3 @@
-```markdown
 # T&P Management System — Django Web Application
 
 A Training & Placement portal built using Django to manage placement drives, contact messages, students, and staff (TPO & coordinators), with role-based dashboards and session-based student drive registration.
