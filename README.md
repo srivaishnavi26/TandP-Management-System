@@ -59,7 +59,7 @@ A Training & Placement portal built using Django to manage placement drives, con
    ```sh
    git clone <your-repo-url>
    cd TandP-Management-System   # or your folder name
-  ```
+   ```
 
 2. **Create virtual env**
 
