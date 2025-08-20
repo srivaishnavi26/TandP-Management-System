@@ -53,15 +53,13 @@ A Training & Placement portal built using Django to manage placement drives, con
 - HTML, CSS (Orange + White theme)
 - Templates using Django templating engine
 
----
-
 ## ⚙ Setup Instructions
 
 1. **Clone repository**
    ```sh
    git clone <your-repo-url>
    cd TandP-Management-System   # or your folder name
-````
+  ```
 
 2. **Create virtual env**
 
@@ -95,9 +93,9 @@ A Training & Placement portal built using Django to manage placement drives, con
    python manage.py runserver
    ```
 
----
 
-## ✅ Default Admin Access Routes
+
+## Default Admin Access Routes
 
 * `/admin/` — Django default admin panel
 * `/admin_login/` — Custom Admin login page
