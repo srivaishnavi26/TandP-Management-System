@@ -390,15 +390,21 @@ def view_verbal_material(request):
 @login_required
 @user_passes_test(is_staff_user)
 def upload_aptitude_test(request):
+    staff_profile = StaffProfile.objects.get(user=request.user)
+
     if request.method == 'POST':
         title = request.POST['title']
         file = request.FILES['file']
-        staff= StaffProfile.objects.get(user=request.user)
-        AptitudeTest.objects.create(title=title, file=file, uploaded_by=staff)
+
+        AptitudeTest.objects.create(
+            title=title,
+            file=file,
+            uploaded_by=staff_profile
+        )
         flash_messages.success(request, "Aptitude test uploaded successfully.")
         return redirect('upload_aptitude_test')
 
-    tests = AptitudeTest.objects.filter(uploaded_by_user=request.user)
+    tests = AptitudeTest.objects.filter(uploaded_by=staff_profile)
     return render(request, 'accounts/upload_aptitude.html', {'tests': tests})
 @login_required
 def view_aptitude_tests(request):
