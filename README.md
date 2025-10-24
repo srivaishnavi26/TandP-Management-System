@@ -1,122 +1,144 @@
-# T&P Management System — Django Web Application
+# Training & Placement Management System — Django Web Application
 
-A Training & Placement portal built using Django to manage placement drives, contact messages, students, and staff (TPO & coordinators), with role-based dashboards and session-based student drive registration.
-
----
-
-##  Features Implemented
-
-### Admin Features
-- Admin login using Django's built-in staff authentication.
-- Dashboard showing:
-  - Contact messages
-  - Buttons to manage placement drives
-  - View registered students
-- Delete contact messages
-- Add/Edit/Delete placement drives
-- Admin can register new students via Django admin (backend only)
-
-### Staff Features
-- Staff members stored in `StaffProfile` with name, mobile, role, and linked Django user.
-- Admin can create staff logins from admin panel and assign roles like:
-  - Training & Placement Officer
-  - Alumni Relations Officer
-  - Department Coordinator, etc.
-- Dashboard now shows logged-in staff's role and name.
-- *(Future upgrade: show features based on that role)*
-
-### Student Features
-- Students stored in a custom `Student` model (name, roll number, email, phone, branch, graduation year, resume upload optional)
-- Student portal:
-  - View available placement drives
-  - Register for drive (only once per drive)
-- Registration stored in `Registration` model
-- Session-based student access (`request.session['student_email']`)
-
-### Contact Us Page
-- Saves entries to database (ContactMessage model)
-- Admin can view & delete messages from dashboard
-
-### Static T&P Team Page
-- Public page showing TPO Team members list (name, role, mobile, email)
+A **comprehensive Training & Placement Portal** built with Django that simplifies and automates the workflow of training and placement activities in an institute.
+The system provides **role-based dashboards** for all users (Admin, TPO, Staff, and Students) with a secure authentication system to manage placement drives, training materials, and student registrations.
 
 ---
 
+## Features Implemented
+
+### 1. Student Portal
+
+- **Full Authentication System:**
+  Students log in using their roll number and password (Django’s built-in `User` model).
+
+- **Student Dashboard:**
+  Displays personal details like `Full Name`, `Roll Number`, and `Branch`.
+
+- **Drive Registration:**
+  - View all available placement drives.
+  - View drives already registered for.
+  - Register for a drive (duplicate registration prevented through backend validation).
+
+- **View Materials:**
+  Access all uploaded **Verbal**, **Aptitude**, and **Technical** training materials.
+
+- **Resume Management:**
+  Upload and view personal resumes securely.
 
 ---
 
-##  Tech Stack
+### 2. Staff & Admin Portal
 
-- **Language:** Python 3.12
-- **Framework:** Django 5.2.4
-- **Database:** SQLite (default)
-- HTML, CSS (Orange + White theme)
-- Templates using Django templating engine
+- **Full Authentication System:**
+  Each staff member (TPO, trainers, coordinators, etc.) logs in using a `User` account linked to a `StaffProfile`.
 
-## ⚙ Setup Instructions
+- **Role-Based Dashboards:**
+  Each role sees a dynamic dashboard with tools specific to their responsibilities:
 
-1. **Clone repository**
-   ```sh
-   git clone <your-repo-url>
-   cd TandP-Management-System  
-   ```
+  | Role | Features |
+  |------|-----------|
+  | **TPO / Associate TPO / Head Corporate** | Add, edit, and delete placement drives. View all registered students. |
+  | **Verbal Trainer** | Upload and delete Verbal Materials. |
+  | **Aptitude Trainer** | Upload and delete Aptitude Tests. |
+  | **Technical / Global Trainer** | Upload and delete Technical Materials. |
+  | **Department Coordinator** | View, add, edit, and delete students for their department only. |
 
-2. **Create virtual env**
-
-   ```sh
-   python -m venv venv
-   source venv/bin/activate  
-   ```
-
-3. **Install packages**
-
-   ```sh
-   pip install -r requirements.txt
-   ```
-
-4. **Run migrations**
-
-   ```sh
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
-
-5. **Create superuser (admin)**
-
-   ```sh
-   python manage.py createsuperuser
-   ```
-
-6. **Run**
-
-   ```sh
-   python manage.py runserver
-   ```
-
-
-
-## Default Admin Access Routes
-
-* `/admin/` — Django default admin panel
-* `/admin_login/` — Custom Admin login page
-* `/admin_dashboard/` — Secure dashboard (staff only)
+- **Admin Dashboard** (`/site-admin/dashboard/`):
+  - Access for site superusers only.
+  - Manage all **Contact Us** messages.
+  - Add, edit, and delete staff profiles and assign roles.
+  - Promote staff members to admin level.
 
 ---
 
-##  Future Enhancements (Planned)
+### 3. General Features
 
-* Email notifications on drive creation or contact submission
-* Search/filter students & drives in admin dashboard
-* Export to CSV
+- **Contact Us Page:**
+  Public form for inquiries, saved to `ContactMessage` model for admin review.
 
----
+- **T&P Team Page:**
+  Static page listing all Training & Placement Cell core team members.
 
-## Contributors
-
-* Sri Vaishnavi (Developer)
-
+- **Media & File Handling:**
+  Handles uploads for student resumes and training materials securely.
 
 ---
 
-*Last updated: August 2025*
+## Tech Stack
 
+| Component | Technology |
+|------------|-------------|
+| **Language** | Python 3.12 |
+| **Framework** | Django 5.2.4 |
+| **Database** | SQLite (development), PostgreSQL (recommended for production) |
+| **Frontend** | HTML, CSS (Orange + White theme) |
+| **Core Logic** | Django Templating Engine, Django ORM, `django.contrib.auth` |
+
+---
+
+## Setup Instructions
+
+1.  **Clone Repository**
+    ```bash
+    git clone <your-repo-url>
+    cd tandp_ms
+    ```
+2.  **Create Virtual Environment**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate      # On Linux/Mac
+    venv\Scripts\activate         # On Windows
+    ```
+3.  **Install Dependencies**
+    ```bash
+    pip install -r requirements.txt
+    ```
+4.  **Run Migrations**
+    ```bash
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+5.  **Create Superuser**
+    ```bash
+    python manage.py createsuperuser
+    ```
+6.  **Configure Admin Access**
+    * Log in to `/admin/` after running the server.
+    * Navigate to Staff Profiles and create a profile for your superuser.
+    * Assign the role `tpo` or `admin` to enable full access.
+7.  **Run Server**
+    ```bash
+    python manage.py runserver
+    ```
+
+### Access Routes
+
+| Route | Description |
+|---|---|
+| `/` | Home Page |
+| `/student/login/` | Student Login |
+| `/staff/login/` | Staff Login (for all staff roles) |
+| `/site-admin/login/` | Custom Admin Login (for superuser) |
+| `/site-admin/dashboard/` | Custom Admin Dashboard |
+| `/admin/` | Default Django Admin Panel |
+
+---
+
+## Future Enhancements (Planned)
+
+-   Email notifications for:
+    -   New placement drives
+    -   Contact form submissions
+-   Search & filter options for students and drives.
+-   Export registered student lists to CSV/Excel.
+
+---
+
+## Contributor
+
+-   **Developer:** Sri Vaishnavi Bhaskara
+-   **Email:** srivaishnavi.bhaskara@gmail.com
+-   **GitHub:** srivaishnavi26
+
+*Last updated: October 2025*
