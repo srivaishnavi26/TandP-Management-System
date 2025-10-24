@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# ========== Staff Profile ==========
 class StaffProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -8,9 +9,14 @@ class StaffProfile(models.Model):
     mobile = models.CharField(max_length=15)
     email = models.EmailField()
     role = models.CharField(max_length=100)
+    branch = models.CharField(max_length=50, blank=True, null=True)
+    department = models.CharField(max_length=50, blank=True, null=True)  # added for coordinators
 
     def __str__(self):
         return f"{self.name} ({self.role})"
+
+
+# ========== Student ==========
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=100)
@@ -19,10 +25,13 @@ class Student(models.Model):
     branch = models.CharField(max_length=50)
     graduation_year = models.IntegerField()
     resume = models.FileField(upload_to='resumes/', blank=True, null=True)
+    department = models.CharField(max_length=50)  # auto-assigned by coordinator
 
     def __str__(self):
         return f"{self.full_name} ({self.roll_number})"
 
+
+# ========== Contact Message ==========
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -33,6 +42,8 @@ class ContactMessage(models.Model):
     def __str__(self):
         return f"{self.name} - {self.subject}"
 
+
+# ========== Placement Drive ==========
 class PlacementDrive(models.Model):
     company_name = models.CharField(max_length=100)
     job_role = models.CharField(max_length=100)
@@ -42,6 +53,9 @@ class PlacementDrive(models.Model):
 
     def __str__(self):
         return f"{self.company_name} - {self.job_role}"
+
+
+# ========== Registration ==========
 class Registration(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     drive = models.ForeignKey(PlacementDrive, on_delete=models.CASCADE)
@@ -53,16 +67,19 @@ class Registration(models.Model):
     def __str__(self):
         return f"{self.student.roll_number} registered for {self.drive.company_name}"
 
+
+# ========== Verbal Material ==========
 class VerbalMaterial(models.Model):
     title = models.CharField(max_length=200)
     file = models.FileField(upload_to='verbal_materials/')
     uploaded_by = models.ForeignKey(StaffProfile, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         return self.title
 
+
+# ========== Aptitude Test ==========
 class AptitudeTest(models.Model):
     title = models.CharField(max_length=200)
     file = models.FileField(upload_to='aptitude_tests/')

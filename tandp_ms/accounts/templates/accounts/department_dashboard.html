@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/department_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h2>Department Dashboard</h2>
+        <a href="{% url 'logout' %}" class="dashboard-button logout-btn">Logout</a>
+    </div>
+
+    <!-- Dashboard Cards and Actions -->
+    <div class="dashboard-top">
+        <div class="dashboard-card">
+            <div>Total Students</div>
+            <div class="card-number">{{ students|length }}</div>
+        </div>
+        <a href="{% url 'add_student' %}" class="dashboard-button add-btn">Add Student</a>
+    </div>
+
+    <!-- Students Table -->
+    <table class="materials-table">
+        <thead>
+            <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Graduation Year</th>
+                <th>Department</th>
+                <th>Resume</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.roll_number }}</td>
+                <td>{{ student.full_name }}</td>
+                <td>{{ student.phone }}</td>
+                <td>{{ student.graduation_year }}</td>
+                <td>{{ student.department }}</td>
+                <td>
+                    {% if student.resume %}
+                        <a href="{{ student.resume.url }}">Download</a>
+                    {% else %}
+                        Not Uploaded
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_student' student.id %}" class="table-button">Edit</a>
+                    <form method="post" action="{% url 'delete_student' student.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="table-button danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No students in this branch.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

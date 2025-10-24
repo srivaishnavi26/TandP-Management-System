@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/student.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Add New Student</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label>{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="dashboard-button">Save</button>
+    </form>
+
+    <a href="{% url 'department_dashboard' %}" class="dashboard-button secondary">Back to Dashboard</a>
+</div>
+{% endblock %}

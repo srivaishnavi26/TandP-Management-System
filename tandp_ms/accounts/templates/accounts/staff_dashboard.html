@@ -34,7 +34,7 @@
         {% endif %}
 
         {% if role == "department_coordinator" %}
-            <a href="#" class="dashboard-button">My Dept. Students</a>
+            <a href="{% url 'department_dashboard' %}" class="dashboard-button">Go to Department Dashboard</a>
         {% endif %}
 
         {% if role == "technical_trainer" or role == "global_trainer" %}

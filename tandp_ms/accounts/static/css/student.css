@@ -1,0 +1,197 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.form-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 35px 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.form-container h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
+}
+
+/* Base grid layout */
+.form-group {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 15px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #d0d0d0;
+    outline: none;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #ffa94d;
+}
+
+/* --- Resume Section --- */
+.form-group.resume-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.form-group.resume-edit label {
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.form-group.resume-edit a {
+    display: inline-block;
+    background-color: #f0f4ff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #1a73e8;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 5px;
+    word-break: break-word;
+    transition: background-color 0.2s ease;
+}
+
+.form-group.resume-edit a:hover {
+    background-color: #dbe7ff;
+}
+
+.form-group.resume-edit input[type="file"] {
+    display: inline-block;
+    padding: 6px 8px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #d0d0d0;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.form-group.resume-edit input[type="file"]:focus {
+    border-color: #ffa94d;
+}
+
+.form-group.resume-edit .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.form-group.resume-edit .checkbox-wrapper label {
+    font-weight: normal;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* --- Buttons --- */
+.dashboard-button {
+    display: block;
+    width: 100%;
+    max-width: 250px;
+    margin: 12px auto;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: #ffa94d;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.dashboard-button:hover {
+    background-color: #ff8800;
+}
+
+.dashboard-button.secondary {
+    background-color: #ff8800;
+}
+
+.dashboard-button.secondary:hover {
+    background-color: #e67300;
+}
+
+/* --- Responsive --- */
+@media (max-width: 800px) {
+    .form-container {
+        margin: 25px;
+        padding: 25px;
+    }
+
+    .form-group {
+        grid-template-columns: 1fr;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .form-group label {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 0;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+    }
+
+    .form-group.resume-edit {
+        gap: 10px;
+    }
+
+    .form-group.resume-edit .checkbox-wrapper {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .form-group.resume-edit a,
+    .form-group.resume-edit input[type="file"] {
+        width: 100%;
+    }
+
+    .dashboard-button {
+        max-width: none;
+        width: 100%;
+        margin: 10px 0;
+    }
+}
