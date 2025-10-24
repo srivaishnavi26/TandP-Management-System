@@ -2,28 +2,27 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/upload_verbal.css' %}">
+    <link rel="stylesheet" href="{% static 'css/upload_technical.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="dashboard-container">
-    <h2>Upload Verbal Material</h2>
-
+    <h2>Upload Technical Material</h2>
     {% if messages %}
         {% for message in messages %}
-            <p style="color: green;">{{ message }}</p>
+            <p style="color: green; text-align: center;">{{ message }}</p>
         {% endfor %}
     {% endif %}
-
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="title">Title</label>
-        <input type="text" name="title" required>
+        <input type="text" name="title" id="title" required>
 
         <label for="file">File</label>
-        <input type="file" name="file" required>
+        <input type="file" name="file" id="file" required>
 
         <button type="submit" class="dashboard-button">Upload</button>
     </form>
+
 </div>
 {% endblock %}

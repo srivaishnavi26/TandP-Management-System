@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'accounts/css/manage_drives.css' %}">
+<link rel="stylesheet" href="{% static 'css/manage_drives.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -32,7 +32,11 @@
                         <td>
                             <div class="action-buttons">
                                 <a href="{% url 'edit_drive' drive.id %}">Edit</a>
-                                <a href="{% url 'delete_drive' drive.id %}" onclick="return confirm('Are you sure you want to delete this drive?')">Delete</a>
+
+                                <form method="post" action="{% url 'delete_drive' drive.id %}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this drive?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="danger-link-button">Delete</button>
+                                </form>
                             </div>
                         </td>
                     </tr>

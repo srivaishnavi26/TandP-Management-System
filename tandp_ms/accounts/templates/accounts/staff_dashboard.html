@@ -38,7 +38,7 @@
         {% endif %}
 
         {% if role == "technical_trainer" or role == "global_trainer" %}
-            <a href="#" class="dashboard-button">Upload Technical Content</a>
+            <a href="{% url 'upload_technical_material' %}" class="dashboard-button">Upload Technical Content</a>
         {% endif %}
 
         <a href="{% url 'logout' %}" class="dashboard-button danger-button">Logout</a>
@@ -83,7 +83,7 @@
                 <th>Title</th>
                 <th>Uploaded At</th>
                 <th>Download</th>
-            </tr>
+                <th>Delete</th> </tr>
         </thead>
         <tbody>
             {% for test in aptitude_tests %}
@@ -93,10 +93,49 @@
                 <td>
                     <a href="{{ test.file.url }}" class="table-button" download>Download</a>
                 </td>
+
+                <td>
+                    <form method="post" action="{% url 'delete_aptitude_test' test.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="table-button danger">Delete</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% endif %}
-</div>
+{% if technical_materials %}
+        {% if role == "technical_trainer" or role == "global_trainer" %}
+            <h3 style="margin-top: 40px;">Your Uploaded Technical Materials</h3>
+            <table class="materials-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Uploaded At</th>
+                        <th>Download</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in technical_materials %}
+                    <tr>
+                        <td>{{ material.title }}</td>
+                        <td>{{ material.uploaded_at|date:"Y-m-d H:i" }}</td>
+                        <td>
+                            <a href="{{ material.file.url }}" class="table-button" download>Download</a>
+                        </td>
+                        <td>
+                            <form method="post" action="{% url 'delete_technical_material' material.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="table-button danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+    </div>
 {% endblock %}

@@ -135,7 +135,7 @@
                 <td>{{ msg.email }}</td>
                 <td>{{ msg.message }}</td>
 <td class="message-delete-cell">
-    <form method="post" action="{% url 'delete_contact_message' msg.id %}">
+    <form method="post" action="{% url 'delete_message' msg.id %}">
         {% csrf_token %}
         <button type="submit" class="delete-button">Delete</button>
     </form>

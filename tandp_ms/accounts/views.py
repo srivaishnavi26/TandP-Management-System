@@ -13,7 +13,8 @@ from .models import (
     Registration,
     StaffProfile,
     VerbalMaterial,
-    AptitudeTest
+    AptitudeTest,
+    TechnicalMaterial
 )
 
 # =======================
@@ -21,18 +22,28 @@ from .models import (
 # =======================
 
 def admin_required(view_func):
-    return user_passes_test(lambda u: u.is_authenticated and u.is_superuser)(view_func)
+    return user_passes_test(
+        lambda u: u.is_authenticated and u.is_superuser,
+        login_url='/site-admin/login/'  # <-- Tell it where admin login is
+    )(view_func)
 
 def staff_required(view_func):
-    return user_passes_test(lambda u: u.is_authenticated and u.is_staff)(view_func)
+    return user_passes_test(
+        lambda u: u.is_authenticated and u.is_staff,
+        login_url='/staff/login/'  # <-- Tell it where staff login is
+    )(view_func)
 
 def strict_staff_required(view_func):
-    return user_passes_test(lambda u: u.is_authenticated and u.is_staff and not u.is_superuser)(view_func)
+    return user_passes_test(
+        lambda u: u.is_authenticated and u.is_staff and not u.is_superuser,
+        login_url='/staff/login/'  # <-- Tell it where staff login is
+    )(view_func)
 
 def department_coordinator_required(view_func):
-    return user_passes_test(lambda u: StaffProfile.objects.filter(user=u, role='department_coordinator').exists())(view_func)
-
-
+    return user_passes_test(
+        lambda u: StaffProfile.objects.filter(user=u, role='department_coordinator').exists(),
+        login_url='/staff/login/'  # <-- Tell it where staff login is
+    )(view_func)
 # =======================
 # ===== Login Views =====
 # =======================
@@ -62,6 +73,12 @@ def staff_login_view(request):
                 logout(request)
                 messages.error(request, 'Your staff profile is not set up. Contact admin.')
                 return render(request, 'accounts/staff_login.html')
+
+            # Get the 'next' URL from the query parameters
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
+
             return redirect('admin_dashboard') if user.is_superuser else redirect('staff_dashboard')
         messages.error(request, 'Invalid credentials or not a staff member.')
     return render(request, 'accounts/staff_login.html')
@@ -74,6 +91,12 @@ def admin_login_view(request):
         user = authenticate(request, username=username, password=password)
         if user and user.is_superuser:
             login(request, user)
+
+            # Get the 'next' URL from the query parameters
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
+
             return redirect('admin_dashboard')
         messages.error(request, 'Invalid admin credentials.')
     return render(request, 'accounts/admin_login.html')
@@ -122,6 +145,8 @@ def staff_dashboard(request):
         'upcoming_drives': PlacementDrive.objects.filter(date__gte=timezone.now()).count(),
         'total_drives': PlacementDrive.objects.count(),
     }
+    if staff_profile.role in ['technical_trainer', 'global_trainer']:
+        context['technical_materials'] = TechnicalMaterial.objects.filter(uploaded_by=staff_profile).order_by('-uploaded_at')
     if staff_profile.role == 'verbal_trainer':
         context['verbal_materials'] = VerbalMaterial.objects.filter(uploaded_by=staff_profile).order_by('-uploaded_at')
     if staff_profile.role == 'aptitude_trainer':
@@ -181,11 +206,15 @@ def edit_drive(request, drive_id):
 
 
 @login_required
-@admin_required
+@staff_required
 def delete_drive(request, drive_id):
     drive = get_object_or_404(PlacementDrive, id=drive_id)
-    drive.delete()
-    messages.success(request, "Drive deleted successfully.")
+    if request.method == 'POST':
+        drive.delete()
+        messages.success(request, "Drive deleted successfully.")
+    else:
+        messages.error(request, "Invalid request method.")
+
     return redirect('view_drives')
 
 
@@ -248,6 +277,11 @@ def upload_verbal_material(request):
 @staff_required
 def delete_verbal_material(request, material_id):
     material = get_object_or_404(VerbalMaterial, id=material_id)
+    # Optional Security Check: ensure the user deleting is the one who uploaded
+    # if material.uploaded_by != request.user.staffprofile:
+    #     messages.error(request, "You do not have permission to delete this material.")
+    #     return redirect('staff_dashboard')
+
     material.file.delete()
     material.delete()
     messages.success(request, "Material deleted successfully.")
@@ -284,6 +318,21 @@ def view_aptitude_tests(request):
     return render(request, 'accounts/view_aptitude_tests.html', {'tests': tests})
 
 
+@login_required
+@staff_required
+def delete_aptitude_test(request, test_id):
+    test = get_object_or_404(AptitudeTest, id=test_id)
+    # Optional Security Check: ensure the user deleting is the one who uploaded
+    # if test.uploaded_by != request.user.staffprofile:
+    #     messages.error(request, "You do not have permission to delete this test.")
+    #     return redirect('staff_dashboard')
+
+    test.file.delete()
+    test.delete()
+    messages.success(request, "Aptitude test deleted successfully.")
+    return redirect('staff_dashboard')
+
+
 # =======================
 # ===== Students =======
 # =======================
@@ -308,6 +357,7 @@ def add_student(request):
 @login_required
 @department_coordinator_required
 def edit_student(request, student_id):
+    # === TYPO FIX HERE ===
     staff_profile = get_object_or_404(StaffProfile, user=request.user)
     student = get_object_or_404(Student, id=student_id)
     if request.method == 'POST':
@@ -415,7 +465,7 @@ def contact_view(request):
             subject=request.POST.get("subject"),
             message=request.POST.get("message")
         )
-        messages.success(request, "Message sent successfully.")
+        messages.success(request, "Message sent.")
     return render(request, 'accounts/contact.html')
 
 
@@ -430,20 +480,36 @@ def delete_message(request, message_id):
 
 def team_view(request):
     team_members = [
-        {"sno": 1, "name": "Mr. C. Y. Balu", "designation": "Head – Corporate Relations", "mobile": "9900944775", "email": "balucy@srit.ac.in"},
-        {"sno": 2, "name": "Dr. S Bhargava Reddy", "designation": "Training & Placement Officer", "mobile": "9515811111", "email": "tpo@srit.ac.in"},
-        {"sno": 3, "name": "Dr. D Anil Kumar", "designation": "Alumni Relations Officer & Verbal Trainer", "mobile": "9791265918", "email": "alumni@srit.ac.in"},
-        {"sno": 4, "name": "Dr. G. Hemanth Kumar Yadav", "designation": "Industry Relations Officer & Technical Trainer", "mobile": "9848169943", "email": "iiicell@srit.ac.in"},
-        {"sno": 5, "name": "Mr. S Moin Ahmed", "designation": "Associate TPO & Coordinator – MEC", "mobile": "8328220829", "email": "atpo@srit.ac.in"},
-        {"sno": 6, "name": "Mrs. T A Swathi", "designation": "Coordinator – Civil", "mobile": "8074669931", "email": "swathi.civ@srit.ac.in"},
-        {"sno": 7, "name": "Mr. Y. Sathish Kumar", "designation": "Coordinator – EEE", "mobile": "8309918031", "email": "sathishkumar.eee@srit.ac.in"},
-        {"sno": 8, "name": "Mr. D. Sreekanth Reddy", "designation": "Coordinator – ECE", "mobile": "9963917078", "email": "sreekanthreddy.ece@srit.ac.in"},
-        {"sno": 9, "name": "Mr. K Kondanna", "designation": "Coordinator – CSD & Technical Trainer (Global Certifications)", "mobile": "9985502062", "email": "kondanna.cse@srit.ac.in"},
-        {"sno": 10, "name": "Dr. D. Rajesh Babu", "designation": "Coordinator – CSE & CSM", "mobile": "9966982288", "email": "rajeshbabud.cse@srit.ac.in"},
-        {"sno": 11, "name": "Mr. M Prabhakar", "designation": "Aptitude & Reasoning Trainer", "mobile": "9441553074", "email": "prabhakar.hs@srit.ac.in"},
-        {"sno": 12, "name": "Mr. V Naveen Kumar", "designation": "Clerk – AIRP", "mobile": "9398023404", "email": "clerk.tpcell@srit.ac.in"},
+        {"sno": 1, "name": "Mr. C. Y. Balu", "designation": "Head – Corporate Relations", "mobile": "9900944775",
+         "email": "balucy@srit.ac.in"},
+        {"sno": 2, "name": "Dr. S Bhargava Reddy", "designation": "Training & Placement Officer",
+         "mobile": "9515811111", "email": "tpo@srit.ac.in"},
+        {"sno": 3, "name": "Dr. D Anil Kumar", "designation": "Alumni Relations Officer & Verbal Trainer",
+         "mobile": "9791265918", "email": "alumni@srit.ac.in"},
+        {"sno": 4, "name": "Dr. G. Hemanth Kumar Yadav",
+         "designation": "Industry Relations Officer & Technical Trainer", "mobile": "9848169943",
+         "email": "iiicell@srit.ac.in"},
+        {"sno": 5, "name": "Mr. S Moin Ahmed", "designation": "Associate TPO & Coordinator – MEC",
+         "mobile": "8328220829", "email": "atpo@srit.ac.in"},
+        {"sno": 6, "name": "Mrs. T A Swathi", "designation": "Coordinator – Civil", "mobile": "8074669931",
+         "email": "swathi.civ@srit.ac.in"},
+        {"sno": 7, "name": "Mr. Y. Sathish Kumar", "designation": "Coordinator – EEE", "mobile": "8309918031",
+         "email": "sathishkumar.eee@srit.ac.in"},
+        {"sno": 8, "name": "Mr. D. Sreekanth Reddy", "designation": "Coordinator – ECE", "mobile": "9963917078",
+         "email": "sreekanthreddy.ece@srit.ac.in"},
+        {"sno": 9, "name": "Mr. K Kondanna",
+         "designation": "Coordinator – CSD & Technical Trainer (Global Certifications)", "mobile": "9985502062",
+         "email": "kondanna.cse@srit.ac.in"},
+        {"sno": 10, "name": "Dr. D. Rajesh Babu", "designation": "Coordinator – CSE & CSM", "mobile": "9966982288",
+         "email": "rajeshbabud.cse@srit.ac.in"},
+        {"sno": 11, "name": "Mr. M Prabhakar", "designation": "Aptitude & Reasoning Trainer", "mobile": "9441553074",
+         "email": "prabhakar.hs@srit.ac.in"},
+        {"sno": 12, "name": "Mr. V Naveen Kumar", "designation": "Clerk – AIRP", "mobile": "9398023404",
+         "email": "clerk.tpcell@srit.ac.in"},
     ]
     return render(request, 'accounts/team.html', {'team_members': team_members})
+
+
 @login_required
 def upload_resume(request):
     student = get_object_or_404(Student, user=request.user)
@@ -452,14 +518,59 @@ def upload_resume(request):
         student.save()
         messages.success(request, "Resume uploaded successfully.")
     return render(request, 'accounts/upload_resume.html', {'student': student})
+
+
 @login_required
 @staff_required
 def view_students(request):
     students = Student.objects.all().order_by('roll_number')
     return render(request, 'accounts/view_students.html', {'students': students})
+
+
+@login_required
+def view_verbal_material(request):
+    materials = VerbalMaterial.objects.all().order_by('-uploaded_at')
+    return render(request, 'accounts/view_verbal_material.html', {'materials': materials})
+
+
 @login_required
 @staff_required
-def view_verbal_material(request):
+def upload_technical_material(request):
     staff_profile = get_object_or_404(StaffProfile, user=request.user)
-    materials = VerbalMaterial.objects.filter(uploaded_by=staff_profile).order_by('-uploaded_at')
-    return render(request, 'accounts/view_verbal.html', {'materials': materials})
+    if staff_profile.role not in ['technical_trainer', 'global_trainer']:
+        raise PermissionDenied
+
+    if request.method == 'POST' and request.FILES.get('file'):
+        TechnicalMaterial.objects.create(
+            title=request.POST.get('title'),
+            file=request.FILES['file'],
+            uploaded_by=staff_profile
+        )
+        messages.success(request, "Technical material uploaded successfully.")
+        return redirect('upload_technical_material')  # Redirect to the same page
+
+    materials = TechnicalMaterial.objects.filter(uploaded_by=staff_profile).order_by('-uploaded_at')
+    return render(request, 'accounts/upload_technical.html', {'materials': materials})
+
+
+@login_required
+@staff_required
+def delete_technical_material(request, material_id):
+    material = get_object_or_404(TechnicalMaterial, id=material_id)
+
+    # Security check: only allow uploader or admin to delete
+    staff_profile = get_object_or_404(StaffProfile, user=request.user)
+    if material.uploaded_by != staff_profile and not request.user.is_superuser:
+        messages.error(request, "You do not have permission to delete this material.")
+    else:
+        material.file.delete()  # Delete the file from storage
+        material.delete()  # Delete the record from DB
+        messages.success(request, "Material deleted successfully.")
+
+    # Redirect back to the staff dashboard
+    return redirect('staff_dashboard')
+
+@login_required
+def view_technical_material(request):
+    materials = TechnicalMaterial.objects.all().order_by('-uploaded_at')
+    return render(request, 'accounts/view_technical_material.html', {'materials': materials})

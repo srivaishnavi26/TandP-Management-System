@@ -143,3 +143,20 @@ html, body {
 .drive-form {
     text-align: left;
 }
+.danger-link-button {
+    padding: 8px 16px;
+    background-color: #ff4d4d; /* Red color */
+    color: #fff; /* White text */
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.95em;
+}
+
+.danger-link-button:hover {
+    background-color: #cc0000; /* Darker red */
+}
