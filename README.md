@@ -105,9 +105,6 @@ A Training & Placement portal built using Django to manage placement drives, con
 
 ##  Future Enhancements (Planned)
 
-* Student login / registration (with model-based auth)
-* Resume upload & display to admin
-* Role-based dashboard per staff profile
 * Email notifications on drive creation or contact submission
 * Search/filter students & drives in admin dashboard
 * Export to CSV
