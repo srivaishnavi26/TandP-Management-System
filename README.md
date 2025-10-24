@@ -58,14 +58,14 @@ A Training & Placement portal built using Django to manage placement drives, con
 1. **Clone repository**
    ```sh
    git clone <your-repo-url>
-   cd TandP-Management-System   # or your folder name
+   cd TandP-Management-System  
    ```
 
 2. **Create virtual env**
 
    ```sh
    python -m venv venv
-   source venv/bin/activate   # (Use venv\Scripts\activate on Windows)
+   source venv/bin/activate  
    ```
 
 3. **Install packages**
