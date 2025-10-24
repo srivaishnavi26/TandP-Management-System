@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Training & Placement Management System — Django Web Application
 
 A **comprehensive Training & Placement Portal** built with Django that simplifies and automates the workflow of training and placement activities in an institute.
